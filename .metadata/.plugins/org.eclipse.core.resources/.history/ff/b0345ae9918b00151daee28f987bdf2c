@@ -1,0 +1,51 @@
+package com.wellnr.generator
+
+import java.util.List
+
+class StringUtil {
+	
+	def comment(String s) {
+		s.extend("# ", "")
+	}
+	
+	def echo(String s) {
+		s.extend("echo \"", "\"")
+	}
+	
+	def ensureSentence(String s) {
+		if (s.endsWith(".") || s.endsWith("!") || s.endsWith("?")) {
+			s
+		} else {
+			s + "."
+		}
+	}
+	
+	def extend(String s, String prefix, String postfix) {
+    s.split("\n").map[line|'''«prefix»«line»«postfix»'''].mkString("\n")
+  }
+  
+	def mkString(List<String> strings, String seperator) {
+		strings.fold("") [ seed, string |
+			var result = seed;
+			
+			if (seed.length > 0) {
+				result = result + seperator	
+			}
+			
+			result + string
+		]
+	}
+	
+	def trimLines(String s) {
+		s.replace("(^[\\w]*)(.*)", "BLA\\2")
+	}
+	
+	def variableName(String s) {
+		s.split("\\|").last.replace("--", "").replace('-', '_').toUpperCase
+	}
+	
+	def variable(String s) {
+		'''${«s.variableName»}'''
+	}
+	
+}

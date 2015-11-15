@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.wellnr.bashdsl/src-gen" editDirectory="/com.wellnr.bashdsl.edit/src"
+    editorDirectory="/com.wellnr.bashdsl.editor/src" modelPluginID="com.wellnr.bashdsl"
+    forceOverwrite="true" modelName="BashDSL" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    complianceLevel="6.0" copyrightFields="false" editPluginID="com.wellnr.bashdsl.edit"
+    editorPluginID="com.wellnr.bashdsl.editor" runtimeVersion="2.11">
+  <genPackages prefix="BashDSL" basePackage="com.wellnr" disposableProviderFactory="true"
+      fileExtensions="bdsl" ecorePackage="BashDSL.ecore#/">
+    <genClasses ecoreClass="BashDSL.ecore#//Domainmodel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Domainmodel/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="BashDSL.ecore#//Script">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/copyright"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Script/arguments"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/code"/>
+    </genClasses>
+    <genClasses ecoreClass="BashDSL.ecore#//Argument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/optional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/default"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/description"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

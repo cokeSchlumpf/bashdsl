@@ -1,0 +1,27 @@
+grammar com.wellnr.BashDSL with org.eclipse.xtext.common.Terminals
+
+generate bashDSL "http://www.wellnr.com/BashDSL"
+
+Domainmodel:
+  (elements += Script)*
+;
+ 
+Script:
+  'script' name = FILENAME description = STRING ('copyright' copyright = STRING)? '{'
+    (arguments += Argument)*
+    
+    (code = CODE_BLOCK)?
+  '}'
+;
+
+Argument:
+	(optional ?= 'optional')? 'argument' name = STRING ('with default' default = STRING)? description = STRING
+;
+
+terminal FILENAME:
+	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'-'|'.'|'0'..'9')*
+;
+
+terminal CODE_BLOCK:
+	'"""' -> '"""'
+;

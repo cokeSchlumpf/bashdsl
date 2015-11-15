@@ -1,0 +1,23 @@
+grammar com.wellnr.BashDSL with org.eclipse.xtext.common.Terminals
+
+generate bashDSL "http://www.wellnr.com/BashDSL"
+
+Domainmodel:
+  (elements += Script)*
+;
+ 
+Script:
+  'script' name = ID description = STRING ('(' copyright = STRING ')')? '{'
+    (arguments += Argument)*
+    
+    (code = CodeBlock)?
+  '}'
+;
+
+Argument:
+	(optional ?= 'optional')? 'argument' name = STRING ('with default' default = STRING)? description = STRING
+;
+
+CodeBlock:
+	'"""' -> '"""'
+;

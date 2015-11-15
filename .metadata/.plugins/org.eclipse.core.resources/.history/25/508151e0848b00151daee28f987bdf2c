@@ -1,0 +1,23 @@
+package com.wellnr.generator
+
+import java.util.List
+
+class StringUtil {
+	
+	def comment(String s) {
+		mkString(s.split("\n").map[line|'''# «line»'''], "\n")
+	}
+	
+	def mkString(List<String> strings, String seperator) {
+		strings.fold("") [ seed, string |
+			var result = seed;
+			
+			if (seed.length > 0) {
+				result = result + seperator	
+			}
+			
+			result + string
+		]
+	}
+	
+}

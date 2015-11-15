@@ -1,0 +1,53 @@
+grammar com.wellnr.BashDSL with org.eclipse.xtext.common.Terminals
+
+generate bashDSL "http://www.wellnr.com/BashDSL"
+
+Domainmodel:
+  (elements += AbstractElement)*
+;
+ 
+PackageDeclaration:
+  'scripts' name = QualifiedName(description = STRING (',' copyright = STRING)?) '{'
+    (elements += AbstractElement)*
+  '}'
+;
+
+Argument:
+	(optional ?= 'optional')? 'argument' name = STRING 
+;
+ 
+AbstractElement:
+  PackageDeclaration | Type | Import
+;
+ 
+QualifiedName:
+  ID ('.' ID)*
+;
+ 
+Import:
+  'import' importedNamespace = QualifiedNameWithWildcard
+;
+  
+QualifiedNameWithWildcard:
+  QualifiedName '.*'?
+;
+  
+Type:
+  DataType | Entity
+;
+  
+DataType:
+  'datatype' name=ID
+;
+ 
+Entity:
+  'entity' name = ID 
+              ('extends' superType = [Entity | QualifiedName])?
+  '{'
+    (features += Feature)*
+  '}'
+;
+ 
+Feature:
+  (many ?= 'many')? name = ID ':' type = [Type | QualifiedName]
+;

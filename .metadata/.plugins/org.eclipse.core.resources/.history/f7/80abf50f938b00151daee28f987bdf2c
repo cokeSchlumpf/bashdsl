@@ -1,0 +1,16 @@
+package com.wellnr;
+
+import org.junit.Test;
+
+import com.wellnr.generator.StringUtil;
+
+public class StringUtilTest {
+
+	@Test
+	void test() {
+		System.out.println("Hallo");
+//		StringUtil s = new StringUtil();
+//		System.out.println(s.trimLines("     Hallo"));
+	}
+	
+}

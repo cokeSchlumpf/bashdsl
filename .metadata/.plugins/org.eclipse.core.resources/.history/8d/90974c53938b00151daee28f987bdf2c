@@ -1,0 +1,14 @@
+package com.wellnr;
+
+import org.junit.Test;
+
+public class StringUtilTest {
+
+	@Test
+	public void test() {
+		System.out.println("Hallo");
+//		StringUtil s = new StringUtil();
+//		System.out.println(s.trimLines("     Hallo"));
+	}
+	
+}
