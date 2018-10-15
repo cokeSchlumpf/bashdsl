@@ -1,0 +1,5 @@
+setpref targetPlatformPath="${target.platform}"
+resolve "${projects.location}/com.wellnr.bashdsl.buckminster/projects-platform.cquery"
+resolve "${projects.location}/com.wellnr.bashdsl.buckminster/project.cquery"
+build
+perform "com.wellnr.bashdsl.site#site.p2"
