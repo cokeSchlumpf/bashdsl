@@ -41,6 +41,24 @@ public interface BashDSLFactory extends EFactory
   Script createScript();
 
   /**
+   * Returns a new object of class '<em>Description</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Description</em>'.
+   * @generated
+   */
+  Description createDescription();
+
+  /**
+   * Returns a new object of class '<em>Abstract Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Abstract Argument</em>'.
+   * @generated
+   */
+  AbstractArgument createAbstractArgument();
+
+  /**
    * Returns a new object of class '<em>Argument</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -48,6 +66,33 @@ public interface BashDSLFactory extends EFactory
    * @generated
    */
   Argument createArgument();
+
+  /**
+   * Returns a new object of class '<em>Optional Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Optional Argument</em>'.
+   * @generated
+   */
+  OptionalArgument createOptionalArgument();
+
+  /**
+   * Returns a new object of class '<em>Environment Variable</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Environment Variable</em>'.
+   * @generated
+   */
+  EnvironmentVariable createEnvironmentVariable();
+
+  /**
+   * Returns a new object of class '<em>Function</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Function</em>'.
+   * @generated
+   */
+  Function createFunction();
 
   /**
    * Returns the package supported by this factory.

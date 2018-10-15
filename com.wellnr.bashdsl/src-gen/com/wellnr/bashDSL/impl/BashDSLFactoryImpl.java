@@ -66,7 +66,12 @@ public class BashDSLFactoryImpl extends EFactoryImpl implements BashDSLFactory
     {
       case BashDSLPackage.DOMAINMODEL: return createDomainmodel();
       case BashDSLPackage.SCRIPT: return createScript();
+      case BashDSLPackage.DESCRIPTION: return createDescription();
+      case BashDSLPackage.ABSTRACT_ARGUMENT: return createAbstractArgument();
       case BashDSLPackage.ARGUMENT: return createArgument();
+      case BashDSLPackage.OPTIONAL_ARGUMENT: return createOptionalArgument();
+      case BashDSLPackage.ENVIRONMENT_VARIABLE: return createEnvironmentVariable();
+      case BashDSLPackage.FUNCTION: return createFunction();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -99,10 +104,65 @@ public class BashDSLFactoryImpl extends EFactoryImpl implements BashDSLFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public Description createDescription()
+  {
+    DescriptionImpl description = new DescriptionImpl();
+    return description;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public AbstractArgument createAbstractArgument()
+  {
+    AbstractArgumentImpl abstractArgument = new AbstractArgumentImpl();
+    return abstractArgument;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Argument createArgument()
   {
     ArgumentImpl argument = new ArgumentImpl();
     return argument;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OptionalArgument createOptionalArgument()
+  {
+    OptionalArgumentImpl optionalArgument = new OptionalArgumentImpl();
+    return optionalArgument;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EnvironmentVariable createEnvironmentVariable()
+  {
+    EnvironmentVariableImpl environmentVariable = new EnvironmentVariableImpl();
+    return environmentVariable;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Function createFunction()
+  {
+    FunctionImpl function = new FunctionImpl();
+    return function;
   }
 
   /**

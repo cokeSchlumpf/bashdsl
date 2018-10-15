@@ -4,9 +4,16 @@
 package com.wellnr.generator;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.inject.Inject;
+import com.wellnr.bashDSL.AbstractArgument;
 import com.wellnr.bashDSL.Argument;
+import com.wellnr.bashDSL.Description;
+import com.wellnr.bashDSL.Domainmodel;
+import com.wellnr.bashDSL.EnvironmentVariable;
+import com.wellnr.bashDSL.Function;
+import com.wellnr.bashDSL.OptionalArgument;
 import com.wellnr.bashDSL.Script;
 import com.wellnr.generator.StringUtil;
 import java.util.Calendar;
@@ -19,8 +26,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.generator.IFileSystemAccess;
 import org.eclipse.xtext.generator.IGenerator;
+import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.IteratorExtensions;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
@@ -42,12 +51,28 @@ public class BashDSLGenerator implements IGenerator {
     Iterator<Script> _filter = Iterators.<Script>filter(_allContents, Script.class);
     final Procedure1<Script> _function = (Script script) -> {
       String _name = script.getName();
-      String _plus = (_name + ".sh");
+      String _plus = ("Generating " + _name);
+      String _plus_1 = (_plus + ".sh");
+      InputOutput.<String>println(_plus_1);
+      String _name_1 = script.getName();
+      String _plus_2 = (_name_1 + ".sh");
       CharSequence _doGenerate = this.doGenerate(script);
       String _string = _doGenerate.toString();
-      fsa.generateFile(_plus, _string);
+      fsa.generateFile(_plus_2, _string);
     };
     IteratorExtensions.<Script>forEach(_filter, _function);
+    TreeIterator<EObject> _allContents_1 = resource.getAllContents();
+    Iterator<Domainmodel> _filter_1 = Iterators.<Domainmodel>filter(_allContents_1, Domainmodel.class);
+    final Procedure1<Domainmodel> _function_1 = (Domainmodel model) -> {
+      String _readmeTitle = model.getReadmeTitle();
+      boolean _notEquals = (!Objects.equal(_readmeTitle, null));
+      if (_notEquals) {
+        InputOutput.<String>println("Generating README.md");
+        CharSequence _doGenerateReadme = this.doGenerateReadme(model);
+        fsa.generateFile("README.md", _doGenerateReadme);
+      }
+    };
+    IteratorExtensions.<Domainmodel>forEach(_filter_1, _function_1);
   }
   
   private CharSequence doGenerate(final Script script) {
@@ -63,7 +88,8 @@ public class BashDSLGenerator implements IGenerator {
       if (_notEquals) {
         _builder.append(" ");
         String _copyright_1 = script.getCopyright();
-        _builder.append(_copyright_1, "");
+        String _ensureSentence = this.stringUtil.ensureSentence(_copyright_1);
+        _builder.append(_ensureSentence, "");
         _builder.append(" ");
       } else {
         _builder.append("michael.wellner@de.ibm.com ");
@@ -84,58 +110,120 @@ public class BashDSLGenerator implements IGenerator {
     _builder.append("#");
     _builder.newLine();
     _builder.newLine();
+    _builder.append("# Fail if one of the commands fails");
+    _builder.newLine();
+    _builder.append("set -e");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("CURRENTDIR=`pwd`");
+    _builder.newLine();
+    _builder.append("BASEDIR=$(dirname $0)");
+    _builder.newLine();
     EList<Argument> _arguments = script.getArguments();
-    CharSequence _doGenerateInitialize = this.doGenerateInitialize(_arguments);
+    EList<OptionalArgument> _optArguments = script.getOptArguments();
+    Iterable<AbstractArgument> _plus = Iterables.<AbstractArgument>concat(_arguments, _optArguments);
+    List<AbstractArgument> _list = IterableExtensions.<AbstractArgument>toList(_plus);
+    EList<EnvironmentVariable> _variables = script.getVariables();
+    CharSequence _doGenerateInitialize = this.doGenerateInitialize(_list, _variables);
     _builder.append(_doGenerateInitialize, "");
     _builder.newLineIfNotEmpty();
     _builder.newLine();
     _builder.append("main() {");
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("read_variables $@");
+    _builder.append("cd ${BASEDIR} ");
     _builder.newLine();
     _builder.append("  ");
-    _builder.append("check_required");
+    _builder.append("read_variables \"$@\"");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("init_defaults");
-    _builder.newLine();
+    {
+      EList<Argument> _arguments_1 = script.getArguments();
+      int _length = ((Object[])Conversions.unwrapArray(_arguments_1, Object.class)).length;
+      boolean _greaterThan = (_length > 0);
+      if (_greaterThan) {
+        _builder.append("  ");
+        _builder.append("check_required");
+        _builder.newLine();
+      }
+    }
+    {
+      EList<OptionalArgument> _optArguments_1 = script.getOptArguments();
+      final Function1<OptionalArgument, Boolean> _function = (OptionalArgument it) -> {
+        String _default = it.getDefault();
+        return Boolean.valueOf((!Objects.equal(_default, null)));
+      };
+      Iterable<OptionalArgument> _filter = IterableExtensions.<OptionalArgument>filter(_optArguments_1, _function);
+      int _length_1 = ((Object[])Conversions.unwrapArray(_filter, Object.class)).length;
+      boolean _greaterThan_1 = (_length_1 > 0);
+      if (_greaterThan_1) {
+        _builder.append("  ");
+        _builder.append("init_defaults");
+        _builder.newLine();
+      }
+    }
     _builder.append("  ");
     _builder.newLine();
     _builder.append("  ");
     String _code = script.getCode();
-    String _replace = _code.replace("\"\"\"", "");
-    String _trimLines = this.stringUtil.trimLines(_replace);
+    String _replace = _code.replace("{{{", "");
+    String _replace_1 = _replace.replace("}}}", "");
+    String _trimLines = this.stringUtil.trimLines(_replace_1);
     _builder.append(_trimLines, "  ");
     _builder.newLineIfNotEmpty();
-    _builder.append("}");
-    _builder.newLine();
-    _builder.newLine();
-    _builder.append("check_required() {");
-    _builder.newLine();
     _builder.append("  ");
-    EList<Argument> _arguments_1 = script.getArguments();
-    CharSequence _doGenerateCheck = this.doGenerateCheck(_arguments_1);
-    _builder.append(_doGenerateCheck, "  ");
-    _builder.newLineIfNotEmpty();
+    _builder.append("cd ${CURRENTDIR}");
+    _builder.newLine();
     _builder.append("}");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("init_defaults() {");
-    _builder.newLine();
-    _builder.append("\t");
-    EList<Argument> _arguments_2 = script.getArguments();
-    CharSequence _doGenerateDefaults = this.doGenerateDefaults(_arguments_2);
-    _builder.append(_doGenerateDefaults, "\t");
-    _builder.newLineIfNotEmpty();
-    _builder.append("}");
-    _builder.newLine();
-    _builder.newLine();
+    {
+      EList<Argument> _arguments_2 = script.getArguments();
+      int _length_2 = ((Object[])Conversions.unwrapArray(_arguments_2, Object.class)).length;
+      boolean _greaterThan_2 = (_length_2 > 0);
+      if (_greaterThan_2) {
+        _builder.append("check_required() {");
+        _builder.newLine();
+        _builder.append("  ");
+        EList<Argument> _arguments_3 = script.getArguments();
+        EList<EnvironmentVariable> _variables_1 = script.getVariables();
+        CharSequence _doGenerateCheck = this.doGenerateCheck(_arguments_3, _variables_1);
+        _builder.append(_doGenerateCheck, "  ");
+        _builder.newLineIfNotEmpty();
+        _builder.append("}");
+        _builder.newLine();
+        _builder.newLine();
+      }
+    }
+    {
+      EList<OptionalArgument> _optArguments_2 = script.getOptArguments();
+      final Function1<OptionalArgument, Boolean> _function_1 = (OptionalArgument it) -> {
+        String _default = it.getDefault();
+        return Boolean.valueOf((!Objects.equal(_default, null)));
+      };
+      Iterable<OptionalArgument> _filter_1 = IterableExtensions.<OptionalArgument>filter(_optArguments_2, _function_1);
+      int _length_3 = ((Object[])Conversions.unwrapArray(_filter_1, Object.class)).length;
+      boolean _greaterThan_3 = (_length_3 > 0);
+      if (_greaterThan_3) {
+        _builder.append("init_defaults() {");
+        _builder.newLine();
+        _builder.append("\t");
+        EList<OptionalArgument> _optArguments_3 = script.getOptArguments();
+        CharSequence _doGenerateDefaults = this.doGenerateDefaults(_optArguments_3);
+        _builder.append(_doGenerateDefaults, "\t");
+        _builder.newLineIfNotEmpty();
+        _builder.append("}");
+        _builder.newLine();
+        _builder.newLine();
+      }
+    }
     _builder.append("read_variables() {");
     _builder.newLine();
     _builder.append("  ");
-    EList<Argument> _arguments_3 = script.getArguments();
-    CharSequence _doGenerateRead = this.doGenerateRead(_arguments_3);
+    EList<Argument> _arguments_4 = script.getArguments();
+    EList<OptionalArgument> _optArguments_4 = script.getOptArguments();
+    Iterable<AbstractArgument> _plus_1 = Iterables.<AbstractArgument>concat(_arguments_4, _optArguments_4);
+    List<AbstractArgument> _list_1 = IterableExtensions.<AbstractArgument>toList(_plus_1);
+    CharSequence _doGenerateRead = this.doGenerateRead(_list_1);
     _builder.append(_doGenerateRead, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("}");
@@ -146,7 +234,8 @@ public class BashDSLGenerator implements IGenerator {
     _builder.append("  ");
     CharSequence _doGenerateHelp_1 = this.doGenerateHelp(script);
     String _string_1 = _doGenerateHelp_1.toString();
-    String _echo = this.stringUtil.echo(_string_1);
+    String _escape = this.stringUtil.escape(_string_1);
+    String _echo = this.stringUtil.echo(_escape);
     _builder.append(_echo, "  ");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
@@ -156,35 +245,88 @@ public class BashDSLGenerator implements IGenerator {
     _builder.append("sleep 3");
     _builder.newLine();
     _builder.append("  ");
+    _builder.newLine();
+    _builder.append("  ");
+    _builder.append("cd ${CURRENTDIR}");
+    _builder.newLine();
+    _builder.append("  ");
     _builder.append("exit $1");
     _builder.newLine();
     _builder.append("}");
     _builder.newLine();
     _builder.newLine();
-    _builder.append("main $@");
+    {
+      EList<Function> _functions = script.getFunctions();
+      for(final Function func : _functions) {
+        CharSequence _doGenerate = this.doGenerate(func);
+        _builder.append(_doGenerate, "");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    _builder.newLine();
+    _builder.append("main \"$@\"");
     _builder.newLine();
     return _builder;
   }
   
-  private CharSequence doGenerateCheck(final List<Argument> arguments) {
+  private CharSequence doGenerate(final Function func) {
+    StringConcatenation _builder = new StringConcatenation();
+    String _name = func.getName();
+    _builder.append(_name, "");
+    _builder.append("() {");
+    _builder.newLineIfNotEmpty();
+    _builder.append("  ");
+    String _code = func.getCode();
+    String _replace = _code.replace("{{{", "");
+    String _replace_1 = _replace.replace("}}}", "");
+    String _trimLines = this.stringUtil.trimLines(_replace_1);
+    _builder.append(_trimLines, "  ");
+    _builder.newLineIfNotEmpty();
+    _builder.append("}");
+    _builder.newLine();
+    return _builder;
+  }
+  
+  private CharSequence doGenerateCheck(final List<Argument> arguments, final List<EnvironmentVariable> variables) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<Argument, Boolean> _function = (Argument it) -> {
-        boolean _isOptional = it.isOptional();
-        return Boolean.valueOf((!_isOptional));
+      final Function1<EnvironmentVariable, Boolean> _function = (EnvironmentVariable it) -> {
+        String _default = it.getDefault();
+        return Boolean.valueOf(Objects.equal(_default, null));
       };
-      Iterable<Argument> _filter = IterableExtensions.<Argument>filter(arguments, _function);
-      for(final Argument arg : _filter) {
+      Iterable<EnvironmentVariable> _filter = IterableExtensions.<EnvironmentVariable>filter(variables, _function);
+      for(final EnvironmentVariable variable : _filter) {
         _builder.append("if [ -z \"");
-        String _name = arg.getName();
+        String _name = variable.getName();
         CharSequence _variable = this.stringUtil.variable(_name);
         _builder.append(_variable, "");
-        _builder.append("\"]; then");
+        _builder.append("\" ]; then");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append(">&2 echo \"Missing required environment variable: ");
+        String _name_1 = variable.getName();
+        _builder.append(_name_1, "  ");
+        _builder.append(".\"");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("show_help_and_exit 1");
+        _builder.newLine();
+        _builder.append("fi;");
+        _builder.newLine();
+      }
+    }
+    {
+      for(final Argument arg : arguments) {
+        _builder.append("if [ -z \"");
+        String _name_2 = arg.getName();
+        CharSequence _variable_1 = this.stringUtil.variable(_name_2);
+        _builder.append(_variable_1, "");
+        _builder.append("\" ]; then");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
         _builder.append(">&2 echo \"Missing required parameter: ");
-        String _name_1 = arg.getName();
-        _builder.append(_name_1, "  ");
+        String _name_3 = arg.getName();
+        _builder.append(_name_3, "  ");
         _builder.append(".\"");
         _builder.newLineIfNotEmpty();
         _builder.append("  ");
@@ -197,30 +339,44 @@ public class BashDSLGenerator implements IGenerator {
     return _builder;
   }
   
-  private CharSequence doGenerateDefaults(final List<Argument> arguments) {
+  private CharSequence doGenerateDefaults(final List<OptionalArgument> arguments) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      final Function1<Argument, Boolean> _function = (Argument it) -> {
+      final Function1<OptionalArgument, Boolean> _function = (OptionalArgument it) -> {
         String _default = it.getDefault();
         return Boolean.valueOf((!Objects.equal(_default, null)));
       };
-      Iterable<Argument> _filter = IterableExtensions.<Argument>filter(arguments, _function);
-      for(final Argument arg : _filter) {
+      Iterable<OptionalArgument> _filter = IterableExtensions.<OptionalArgument>filter(arguments, _function);
+      for(final OptionalArgument arg : _filter) {
         _builder.append("if [ -z \"");
         String _name = arg.getName();
         CharSequence _variable = this.stringUtil.variable(_name);
         _builder.append(_variable, "");
-        _builder.append("\"]; then");
+        _builder.append("\" ]; then");
         _builder.newLineIfNotEmpty();
-        _builder.append("  ");
-        String _name_1 = arg.getName();
-        String _variableName = this.stringUtil.variableName(_name_1);
-        _builder.append(_variableName, "  ");
-        _builder.append("=\"");
-        String _default = arg.getDefault();
-        _builder.append(_default, "  ");
-        _builder.append("\"");
-        _builder.newLineIfNotEmpty();
+        {
+          boolean _isDynamicDefault = arg.isDynamicDefault();
+          if (_isDynamicDefault) {
+            _builder.append("  ");
+            String _name_1 = arg.getName();
+            String _variableName = this.stringUtil.variableName(_name_1);
+            _builder.append(_variableName, "  ");
+            _builder.append("=");
+            String _default = arg.getDefault();
+            _builder.append(_default, "  ");
+            _builder.newLineIfNotEmpty();
+          } else {
+            _builder.append("  ");
+            String _name_2 = arg.getName();
+            String _variableName_1 = this.stringUtil.variableName(_name_2);
+            _builder.append(_variableName_1, "  ");
+            _builder.append("=\"");
+            String _default_1 = arg.getDefault();
+            _builder.append(_default_1, "  ");
+            _builder.append("\"");
+            _builder.newLineIfNotEmpty();
+          }
+        }
         _builder.append("fi;");
         _builder.newLine();
       }
@@ -235,48 +391,107 @@ public class BashDSLGenerator implements IGenerator {
     String _ensureSentence = this.stringUtil.ensureSentence(_description);
     _builder.append(_ensureSentence, "");
     _builder.newLineIfNotEmpty();
+    {
+      Description _longDescription = script.getLongDescription();
+      boolean _notEquals = (!Objects.equal(_longDescription, null));
+      if (_notEquals) {
+        _builder.newLine();
+        Description _longDescription_1 = script.getLongDescription();
+        String _value = _longDescription_1.getValue();
+        String _replace = _value.replace("{{{", "");
+        String _replace_1 = _replace.replace("}}}", "");
+        String _trimLines = this.stringUtil.trimLines(_replace_1);
+        _builder.append(_trimLines, "");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      EList<EnvironmentVariable> _variables = script.getVariables();
+      int _length = ((Object[])Conversions.unwrapArray(_variables, Object.class)).length;
+      boolean _greaterThan = (_length > 0);
+      if (_greaterThan) {
+        _builder.newLine();
+        _builder.append("The following environment variables are used by the script:");
+        _builder.newLine();
+        _builder.newLine();
+        {
+          EList<EnvironmentVariable> _variables_1 = script.getVariables();
+          for(final EnvironmentVariable variable : _variables_1) {
+            _builder.append("* ");
+            String _name = variable.getName();
+            _builder.append(_name, "");
+            _builder.append(" - ");
+            String _description_1 = variable.getDescription();
+            String _ensureSentence_1 = this.stringUtil.ensureSentence(_description_1);
+            _builder.append(_ensureSentence_1, "");
+            _builder.append(" ");
+            {
+              String _default = variable.getDefault();
+              boolean _notEquals_1 = (!Objects.equal(_default, null));
+              if (_notEquals_1) {
+                _builder.append(" Default: ");
+                String _default_1 = variable.getDefault();
+                _builder.append(_default_1, "");
+                _builder.append(".");
+              }
+            }
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
     _builder.newLine();
     _builder.append("Usage:");
     _builder.newLine();
-    String _name = script.getName();
-    _builder.append(_name, "");
-    _builder.append(" [ -h | --help | OPTIONS ]");
+    String _name_1 = script.getName();
+    _builder.append(_name_1, "");
+    _builder.append(".sh [ -h | --help | OPTIONS ]");
     _builder.newLineIfNotEmpty();
-    _builder.newLine();
-    _builder.append("Options:");
     _builder.newLine();
     {
       EList<Argument> _arguments = script.getArguments();
-      for(final Argument arg : _arguments) {
-        _builder.append("  ");
-        CharSequence _doGenerateHelp = this.doGenerateHelp(arg);
-        _builder.append(_doGenerateHelp, "  ");
-        _builder.newLineIfNotEmpty();
+      EList<OptionalArgument> _optArguments = script.getOptArguments();
+      Iterable<AbstractArgument> _plus = Iterables.<AbstractArgument>concat(_arguments, _optArguments);
+      int _length_1 = ((Object[])Conversions.unwrapArray(_plus, Object.class)).length;
+      boolean _greaterThan_1 = (_length_1 > 0);
+      if (_greaterThan_1) {
+        _builder.append("Options:");
+        _builder.newLine();
+        {
+          EList<Argument> _arguments_1 = script.getArguments();
+          EList<OptionalArgument> _optArguments_1 = script.getOptArguments();
+          Iterable<AbstractArgument> _plus_1 = Iterables.<AbstractArgument>concat(_arguments_1, _optArguments_1);
+          for(final AbstractArgument arg : _plus_1) {
+            _builder.append("  ");
+            CharSequence _doGenerateHelp = this.doGenerateHelp(arg);
+            _builder.append(_doGenerateHelp, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
       }
     }
     return _builder;
   }
   
-  private CharSequence doGenerateHelp(final Argument argument) {
+  private CharSequence doGenerateHelp(final AbstractArgument argument) {
     StringConcatenation _builder = new StringConcatenation();
     String _name = argument.getName();
     _builder.append(_name, "");
     _builder.newLineIfNotEmpty();
     _builder.append("  ");
     {
-      boolean _isOptional = argument.isOptional();
-      if (_isOptional) {
-        _builder.append("Optional. ");
-      }
-    }
-    {
-      String _default = argument.getDefault();
-      boolean _notEquals = (!Objects.equal(_default, null));
-      if (_notEquals) {
-        _builder.append("Default: ");
-        String _default_1 = argument.getDefault();
-        _builder.append(_default_1, "  ");
-        _builder.append(".");
+      if ((argument instanceof OptionalArgument)) {
+        _builder.append("Optional.");
+        {
+          String _default = ((OptionalArgument)argument).getDefault();
+          boolean _notEquals = (!Objects.equal(_default, null));
+          if (_notEquals) {
+            _builder.append(" Default: ");
+            String _default_1 = ((OptionalArgument)argument).getDefault();
+            _builder.append(_default_1, "  ");
+            _builder.append(".");
+          }
+        }
       }
     }
     _builder.newLineIfNotEmpty();
@@ -288,10 +503,10 @@ public class BashDSLGenerator implements IGenerator {
     return _builder;
   }
   
-  private CharSequence doGenerateInitialize(final List<Argument> arguments) {
+  private CharSequence doGenerateInitialize(final List<AbstractArgument> arguments, final List<EnvironmentVariable> variables) {
     StringConcatenation _builder = new StringConcatenation();
     {
-      for(final Argument arg : arguments) {
+      for(final AbstractArgument arg : arguments) {
         String _name = arg.getName();
         String _variableName = this.stringUtil.variableName(_name);
         _builder.append(_variableName, "");
@@ -299,12 +514,58 @@ public class BashDSLGenerator implements IGenerator {
         _builder.newLineIfNotEmpty();
       }
     }
+    _builder.newLine();
+    {
+      final Function1<EnvironmentVariable, Boolean> _function = (EnvironmentVariable it) -> {
+        String _default = it.getDefault();
+        return Boolean.valueOf((!Objects.equal(_default, null)));
+      };
+      Iterable<EnvironmentVariable> _filter = IterableExtensions.<EnvironmentVariable>filter(variables, _function);
+      for(final EnvironmentVariable variable : _filter) {
+        String _name_1 = variable.getName();
+        _builder.append(_name_1, "");
+        _builder.append("=");
+        String _name_2 = variable.getName();
+        CharSequence _variable = this.stringUtil.variable(_name_2);
+        _builder.append(_variable, "");
+        _builder.newLineIfNotEmpty();
+        _builder.append("if [ -z ");
+        String _name_3 = variable.getName();
+        CharSequence _variable_1 = this.stringUtil.variable(_name_3);
+        _builder.append(_variable_1, "");
+        _builder.append(" ]; then");
+        _builder.newLineIfNotEmpty();
+        {
+          boolean _isDynamicDefault = variable.isDynamicDefault();
+          if (_isDynamicDefault) {
+            _builder.append("  ");
+            String _name_4 = variable.getName();
+            _builder.append(_name_4, "  ");
+            _builder.append("=");
+            String _default = variable.getDefault();
+            _builder.append(_default, "  ");
+            _builder.newLineIfNotEmpty();
+          } else {
+            _builder.append("  ");
+            String _name_5 = variable.getName();
+            _builder.append(_name_5, "  ");
+            _builder.append("=\"");
+            String _default_1 = variable.getDefault();
+            _builder.append(_default_1, "  ");
+            _builder.append("\"");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+        _builder.append("fi;");
+        _builder.newLine();
+      }
+    }
     return _builder;
   }
   
-  private CharSequence doGenerateRead(final List<Argument> arguments) {
+  private CharSequence doGenerateRead(final List<AbstractArgument> arguments) {
     StringConcatenation _builder = new StringConcatenation();
-    _builder.append("while [[ $# > 0 ]]");
+    _builder.append("while [[ $# -gt 0 ]]");
     _builder.newLine();
     _builder.append("do");
     _builder.newLine();
@@ -316,7 +577,7 @@ public class BashDSLGenerator implements IGenerator {
     _builder.newLine();
     _builder.append("    ");
     {
-      for(final Argument arg : arguments) {
+      for(final AbstractArgument arg : arguments) {
         CharSequence _doGenerateRead = this.doGenerateRead(arg);
         _builder.append(_doGenerateRead, "    ");
       }
@@ -346,28 +607,217 @@ public class BashDSLGenerator implements IGenerator {
     _builder.append("  ");
     _builder.append("esac");
     _builder.newLine();
-    _builder.append("  ");
-    _builder.append("shift # past argument");
-    _builder.newLine();
-    _builder.append("  ");
-    _builder.append("shift # past argument");
-    _builder.newLine();
     _builder.append("done");
     _builder.newLine();
     return _builder;
   }
   
-  private CharSequence doGenerateRead(final Argument argument) {
+  private CharSequence doGenerateRead(final AbstractArgument argument) {
     StringConcatenation _builder = new StringConcatenation();
     String _name = argument.getName();
     _builder.append(_name, "");
     _builder.append(")");
     _builder.newLineIfNotEmpty();
-    _builder.append("  ");
-    String _name_1 = argument.getName();
-    String _variableName = this.stringUtil.variableName(_name_1);
-    _builder.append(_variableName, "  ");
-    _builder.append("=\"$2\";;");
+    {
+      boolean _and = false;
+      if (!(argument instanceof OptionalArgument)) {
+        _and = false;
+      } else {
+        boolean _isIsBoolean = ((OptionalArgument) argument).isIsBoolean();
+        _and = _isIsBoolean;
+      }
+      if (_and) {
+        _builder.append("  ");
+        String _name_1 = argument.getName();
+        String _variableName = this.stringUtil.variableName(_name_1);
+        _builder.append(_variableName, "  ");
+        _builder.append("=true");
+        _builder.newLineIfNotEmpty();
+        _builder.append("  ");
+        _builder.append("shift # past argument");
+        _builder.newLine();
+        _builder.append("  ");
+        _builder.append(";;");
+        _builder.newLine();
+      } else {
+        boolean _isRemaining = argument.isRemaining();
+        if (_isRemaining) {
+          _builder.append("  ");
+          String _name_2 = argument.getName();
+          String _variableName_1 = this.stringUtil.variableName(_name_2);
+          _builder.append(_variableName_1, "  ");
+          _builder.append("=\"${@:2}\";break;;");
+          _builder.newLineIfNotEmpty();
+        } else {
+          _builder.append("  ");
+          String _name_3 = argument.getName();
+          String _variableName_2 = this.stringUtil.variableName(_name_3);
+          _builder.append(_variableName_2, "  ");
+          _builder.append("=\"$2\"");
+          _builder.newLineIfNotEmpty();
+          _builder.append("  ");
+          _builder.append("shift # past argument");
+          _builder.newLine();
+          _builder.append("  ");
+          _builder.append("shift # past argument");
+          _builder.newLine();
+          _builder.append("  ");
+          _builder.append(";;");
+          _builder.newLine();
+        }
+      }
+    }
+    return _builder;
+  }
+  
+  private CharSequence doGenerateReadme(final Domainmodel model) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("# ");
+    String _readmeTitle = model.getReadmeTitle();
+    _builder.append(_readmeTitle, "");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    String _readmeIntro = model.getReadmeIntro();
+    _builder.append(_readmeIntro, "");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    {
+      EList<Script> _elements = model.getElements();
+      for(final Script script : _elements) {
+        CharSequence _doGenerateReadme = this.doGenerateReadme(script);
+        _builder.append(_doGenerateReadme, "");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    return _builder;
+  }
+  
+  private CharSequence doGenerateReadme(final Script script) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("## ");
+    String _name = script.getName();
+    _builder.append(_name, "");
+    _builder.append(".sh");
+    _builder.newLineIfNotEmpty();
+    _builder.newLine();
+    _builder.append("This script ");
+    String _description = script.getDescription();
+    String _ensureSentence = this.stringUtil.ensureSentence(_description);
+    _builder.append(_ensureSentence, "");
+    _builder.newLineIfNotEmpty();
+    {
+      Description _longDescription = script.getLongDescription();
+      boolean _notEquals = (!Objects.equal(_longDescription, null));
+      if (_notEquals) {
+        _builder.newLine();
+        Description _longDescription_1 = script.getLongDescription();
+        String _value = _longDescription_1.getValue();
+        String _replace = _value.replace("{{{", "");
+        String _replace_1 = _replace.replace("}}}", "");
+        String _trimLines = this.stringUtil.trimLines(_replace_1);
+        _builder.append(_trimLines, "");
+        _builder.newLineIfNotEmpty();
+      }
+    }
+    {
+      EList<EnvironmentVariable> _variables = script.getVariables();
+      int _length = ((Object[])Conversions.unwrapArray(_variables, Object.class)).length;
+      boolean _greaterThan = (_length > 0);
+      if (_greaterThan) {
+        _builder.newLine();
+        _builder.append("The following environment variables are used by the script:");
+        _builder.newLine();
+        _builder.newLine();
+        {
+          EList<EnvironmentVariable> _variables_1 = script.getVariables();
+          for(final EnvironmentVariable variable : _variables_1) {
+            _builder.append("* **");
+            String _name_1 = variable.getName();
+            _builder.append(_name_1, "");
+            _builder.append("** - ");
+            String _description_1 = variable.getDescription();
+            String _ensureSentence_1 = this.stringUtil.ensureSentence(_description_1);
+            _builder.append(_ensureSentence_1, "");
+            {
+              String _default = variable.getDefault();
+              boolean _notEquals_1 = (!Objects.equal(_default, null));
+              if (_notEquals_1) {
+                _builder.append(" *Default: ");
+                String _default_1 = variable.getDefault();
+                _builder.append(_default_1, "");
+                _builder.append(".*");
+              }
+            }
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.newLine();
+    _builder.append("Usage:");
+    _builder.newLine();
+    _builder.newLine();
+    _builder.append("```");
+    _builder.newLine();
+    String _name_2 = script.getName();
+    _builder.append(_name_2, "");
+    _builder.append(".sh [ -h | --help | OPTIONS ]");
+    _builder.newLineIfNotEmpty();
+    _builder.append("```");
+    _builder.newLine();
+    _builder.newLine();
+    {
+      EList<Argument> _arguments = script.getArguments();
+      EList<OptionalArgument> _optArguments = script.getOptArguments();
+      Iterable<AbstractArgument> _plus = Iterables.<AbstractArgument>concat(_arguments, _optArguments);
+      int _length_1 = ((Object[])Conversions.unwrapArray(_plus, Object.class)).length;
+      boolean _greaterThan_1 = (_length_1 > 0);
+      if (_greaterThan_1) {
+        _builder.append("Options:");
+        _builder.newLine();
+        {
+          EList<Argument> _arguments_1 = script.getArguments();
+          EList<OptionalArgument> _optArguments_1 = script.getOptArguments();
+          Iterable<AbstractArgument> _plus_1 = Iterables.<AbstractArgument>concat(_arguments_1, _optArguments_1);
+          for(final AbstractArgument arg : _plus_1) {
+            _builder.append("  ");
+            CharSequence _doGenerateReadme = this.doGenerateReadme(arg);
+            _builder.append(_doGenerateReadme, "  ");
+            _builder.newLineIfNotEmpty();
+          }
+        }
+      }
+    }
+    _builder.newLine();
+    return _builder;
+  }
+  
+  private CharSequence doGenerateReadme(final AbstractArgument argument) {
+    StringConcatenation _builder = new StringConcatenation();
+    _builder.append("* **");
+    String _name = argument.getName();
+    _builder.append(_name, "");
+    _builder.append("** - ");
+    String _description = argument.getDescription();
+    String _ensureSentence = this.stringUtil.ensureSentence(_description);
+    _builder.append(_ensureSentence, "");
+    _builder.append(" ");
+    {
+      if ((argument instanceof OptionalArgument)) {
+        _builder.append("*Optional.");
+        {
+          String _default = ((OptionalArgument)argument).getDefault();
+          boolean _notEquals = (!Objects.equal(_default, null));
+          if (_notEquals) {
+            _builder.append(" Default: ");
+            String _default_1 = ((OptionalArgument)argument).getDefault();
+            _builder.append(_default_1, "");
+            _builder.append(".");
+          }
+        }
+        _builder.append("*");
+      }
+    }
     _builder.newLineIfNotEmpty();
     return _builder;
   }

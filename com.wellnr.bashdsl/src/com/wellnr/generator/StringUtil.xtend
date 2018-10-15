@@ -24,6 +24,10 @@ class StringUtil {
     s.split("\n").map[line|'''«prefix»«line»«postfix»'''].mkString("\n")
   }
   
+  def escape(String s) {
+    s.replace("$", "\\$").replace("`", "\\`").replace("\"", "\\\"")
+  }
+  
 	def mkString(List<String> strings, String seperator) {
 		strings.fold("") [ seed, string |
 			var result = seed;

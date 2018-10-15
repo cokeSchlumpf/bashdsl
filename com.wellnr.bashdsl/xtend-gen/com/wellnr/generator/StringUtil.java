@@ -56,6 +56,12 @@ public class StringUtil {
     return this.mkString(_map, "\n");
   }
   
+  public String escape(final String s) {
+    String _replace = s.replace("$", "\\$");
+    String _replace_1 = _replace.replace("`", "\\`");
+    return _replace_1.replace("\"", "\\\"");
+  }
+  
   public String mkString(final List<String> strings, final String seperator) {
     final Function2<String, String, String> _function = (String seed, String string) -> {
       String _xblockexpression = null;

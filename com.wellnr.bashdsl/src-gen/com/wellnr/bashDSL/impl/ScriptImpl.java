@@ -4,6 +4,10 @@ package com.wellnr.bashDSL.impl;
 
 import com.wellnr.bashDSL.Argument;
 import com.wellnr.bashDSL.BashDSLPackage;
+import com.wellnr.bashDSL.Description;
+import com.wellnr.bashDSL.EnvironmentVariable;
+import com.wellnr.bashDSL.Function;
+import com.wellnr.bashDSL.OptionalArgument;
 import com.wellnr.bashDSL.Script;
 
 import java.util.Collection;
@@ -33,7 +37,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getCopyright <em>Copyright</em>}</li>
+ *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getLongDescription <em>Long Description</em>}</li>
+ *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getVariables <em>Variables</em>}</li>
  *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getArguments <em>Arguments</em>}</li>
+ *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getOptArguments <em>Opt Arguments</em>}</li>
+ *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getFunctions <em>Functions</em>}</li>
  *   <li>{@link com.wellnr.bashDSL.impl.ScriptImpl#getCode <em>Code</em>}</li>
  * </ul>
  *
@@ -102,6 +110,26 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
   protected String copyright = COPYRIGHT_EDEFAULT;
 
   /**
+   * The cached value of the '{@link #getLongDescription() <em>Long Description</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLongDescription()
+   * @generated
+   * @ordered
+   */
+  protected Description longDescription;
+
+  /**
+   * The cached value of the '{@link #getVariables() <em>Variables</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVariables()
+   * @generated
+   * @ordered
+   */
+  protected EList<EnvironmentVariable> variables;
+
+  /**
    * The cached value of the '{@link #getArguments() <em>Arguments</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -110,6 +138,26 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
    * @ordered
    */
   protected EList<Argument> arguments;
+
+  /**
+   * The cached value of the '{@link #getOptArguments() <em>Opt Arguments</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOptArguments()
+   * @generated
+   * @ordered
+   */
+  protected EList<OptionalArgument> optArguments;
+
+  /**
+   * The cached value of the '{@link #getFunctions() <em>Functions</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFunctions()
+   * @generated
+   * @ordered
+   */
+  protected EList<Function> functions;
 
   /**
    * The default value of the '{@link #getCode() <em>Code</em>}' attribute.
@@ -226,6 +274,68 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
    * <!-- end-user-doc -->
    * @generated
    */
+  public Description getLongDescription()
+  {
+    return longDescription;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetLongDescription(Description newLongDescription, NotificationChain msgs)
+  {
+    Description oldLongDescription = longDescription;
+    longDescription = newLongDescription;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, BashDSLPackage.SCRIPT__LONG_DESCRIPTION, oldLongDescription, newLongDescription);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLongDescription(Description newLongDescription)
+  {
+    if (newLongDescription != longDescription)
+    {
+      NotificationChain msgs = null;
+      if (longDescription != null)
+        msgs = ((InternalEObject)longDescription).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - BashDSLPackage.SCRIPT__LONG_DESCRIPTION, null, msgs);
+      if (newLongDescription != null)
+        msgs = ((InternalEObject)newLongDescription).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - BashDSLPackage.SCRIPT__LONG_DESCRIPTION, null, msgs);
+      msgs = basicSetLongDescription(newLongDescription, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, BashDSLPackage.SCRIPT__LONG_DESCRIPTION, newLongDescription, newLongDescription));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<EnvironmentVariable> getVariables()
+  {
+    if (variables == null)
+    {
+      variables = new EObjectContainmentEList<EnvironmentVariable>(EnvironmentVariable.class, this, BashDSLPackage.SCRIPT__VARIABLES);
+    }
+    return variables;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EList<Argument> getArguments()
   {
     if (arguments == null)
@@ -233,6 +343,34 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
       arguments = new EObjectContainmentEList<Argument>(Argument.class, this, BashDSLPackage.SCRIPT__ARGUMENTS);
     }
     return arguments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<OptionalArgument> getOptArguments()
+  {
+    if (optArguments == null)
+    {
+      optArguments = new EObjectContainmentEList<OptionalArgument>(OptionalArgument.class, this, BashDSLPackage.SCRIPT__OPT_ARGUMENTS);
+    }
+    return optArguments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<Function> getFunctions()
+  {
+    if (functions == null)
+    {
+      functions = new EObjectContainmentEList<Function>(Function.class, this, BashDSLPackage.SCRIPT__FUNCTIONS);
+    }
+    return functions;
   }
 
   /**
@@ -268,8 +406,16 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
   {
     switch (featureID)
     {
+      case BashDSLPackage.SCRIPT__LONG_DESCRIPTION:
+        return basicSetLongDescription(null, msgs);
+      case BashDSLPackage.SCRIPT__VARIABLES:
+        return ((InternalEList<?>)getVariables()).basicRemove(otherEnd, msgs);
       case BashDSLPackage.SCRIPT__ARGUMENTS:
         return ((InternalEList<?>)getArguments()).basicRemove(otherEnd, msgs);
+      case BashDSLPackage.SCRIPT__OPT_ARGUMENTS:
+        return ((InternalEList<?>)getOptArguments()).basicRemove(otherEnd, msgs);
+      case BashDSLPackage.SCRIPT__FUNCTIONS:
+        return ((InternalEList<?>)getFunctions()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -290,8 +436,16 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
         return getDescription();
       case BashDSLPackage.SCRIPT__COPYRIGHT:
         return getCopyright();
+      case BashDSLPackage.SCRIPT__LONG_DESCRIPTION:
+        return getLongDescription();
+      case BashDSLPackage.SCRIPT__VARIABLES:
+        return getVariables();
       case BashDSLPackage.SCRIPT__ARGUMENTS:
         return getArguments();
+      case BashDSLPackage.SCRIPT__OPT_ARGUMENTS:
+        return getOptArguments();
+      case BashDSLPackage.SCRIPT__FUNCTIONS:
+        return getFunctions();
       case BashDSLPackage.SCRIPT__CODE:
         return getCode();
     }
@@ -318,9 +472,24 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
       case BashDSLPackage.SCRIPT__COPYRIGHT:
         setCopyright((String)newValue);
         return;
+      case BashDSLPackage.SCRIPT__LONG_DESCRIPTION:
+        setLongDescription((Description)newValue);
+        return;
+      case BashDSLPackage.SCRIPT__VARIABLES:
+        getVariables().clear();
+        getVariables().addAll((Collection<? extends EnvironmentVariable>)newValue);
+        return;
       case BashDSLPackage.SCRIPT__ARGUMENTS:
         getArguments().clear();
         getArguments().addAll((Collection<? extends Argument>)newValue);
+        return;
+      case BashDSLPackage.SCRIPT__OPT_ARGUMENTS:
+        getOptArguments().clear();
+        getOptArguments().addAll((Collection<? extends OptionalArgument>)newValue);
+        return;
+      case BashDSLPackage.SCRIPT__FUNCTIONS:
+        getFunctions().clear();
+        getFunctions().addAll((Collection<? extends Function>)newValue);
         return;
       case BashDSLPackage.SCRIPT__CODE:
         setCode((String)newValue);
@@ -348,8 +517,20 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
       case BashDSLPackage.SCRIPT__COPYRIGHT:
         setCopyright(COPYRIGHT_EDEFAULT);
         return;
+      case BashDSLPackage.SCRIPT__LONG_DESCRIPTION:
+        setLongDescription((Description)null);
+        return;
+      case BashDSLPackage.SCRIPT__VARIABLES:
+        getVariables().clear();
+        return;
       case BashDSLPackage.SCRIPT__ARGUMENTS:
         getArguments().clear();
+        return;
+      case BashDSLPackage.SCRIPT__OPT_ARGUMENTS:
+        getOptArguments().clear();
+        return;
+      case BashDSLPackage.SCRIPT__FUNCTIONS:
+        getFunctions().clear();
         return;
       case BashDSLPackage.SCRIPT__CODE:
         setCode(CODE_EDEFAULT);
@@ -374,8 +555,16 @@ public class ScriptImpl extends MinimalEObjectImpl.Container implements Script
         return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
       case BashDSLPackage.SCRIPT__COPYRIGHT:
         return COPYRIGHT_EDEFAULT == null ? copyright != null : !COPYRIGHT_EDEFAULT.equals(copyright);
+      case BashDSLPackage.SCRIPT__LONG_DESCRIPTION:
+        return longDescription != null;
+      case BashDSLPackage.SCRIPT__VARIABLES:
+        return variables != null && !variables.isEmpty();
       case BashDSLPackage.SCRIPT__ARGUMENTS:
         return arguments != null && !arguments.isEmpty();
+      case BashDSLPackage.SCRIPT__OPT_ARGUMENTS:
+        return optArguments != null && !optArguments.isEmpty();
+      case BashDSLPackage.SCRIPT__FUNCTIONS:
+        return functions != null && !functions.isEmpty();
       case BashDSLPackage.SCRIPT__CODE:
         return CODE_EDEFAULT == null ? code != null : !CODE_EDEFAULT.equals(code);
     }

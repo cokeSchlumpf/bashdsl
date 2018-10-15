@@ -85,9 +85,34 @@ public class BashDSLAdapterFactory extends AdapterFactoryImpl
         return createScriptAdapter();
       }
       @Override
+      public Adapter caseDescription(Description object)
+      {
+        return createDescriptionAdapter();
+      }
+      @Override
+      public Adapter caseAbstractArgument(AbstractArgument object)
+      {
+        return createAbstractArgumentAdapter();
+      }
+      @Override
       public Adapter caseArgument(Argument object)
       {
         return createArgumentAdapter();
+      }
+      @Override
+      public Adapter caseOptionalArgument(OptionalArgument object)
+      {
+        return createOptionalArgumentAdapter();
+      }
+      @Override
+      public Adapter caseEnvironmentVariable(EnvironmentVariable object)
+      {
+        return createEnvironmentVariableAdapter();
+      }
+      @Override
+      public Adapter caseFunction(Function object)
+      {
+        return createFunctionAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -142,6 +167,36 @@ public class BashDSLAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link com.wellnr.bashDSL.Description <em>Description</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.wellnr.bashDSL.Description
+   * @generated
+   */
+  public Adapter createDescriptionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.wellnr.bashDSL.AbstractArgument <em>Abstract Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.wellnr.bashDSL.AbstractArgument
+   * @generated
+   */
+  public Adapter createAbstractArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link com.wellnr.bashDSL.Argument <em>Argument</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -152,6 +207,51 @@ public class BashDSLAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.wellnr.bashDSL.OptionalArgument <em>Optional Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.wellnr.bashDSL.OptionalArgument
+   * @generated
+   */
+  public Adapter createOptionalArgumentAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.wellnr.bashDSL.EnvironmentVariable <em>Environment Variable</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.wellnr.bashDSL.EnvironmentVariable
+   * @generated
+   */
+  public Adapter createEnvironmentVariableAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.wellnr.bashDSL.Function <em>Function</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.wellnr.bashDSL.Function
+   * @generated
+   */
+  public Adapter createFunctionAdapter()
   {
     return null;
   }

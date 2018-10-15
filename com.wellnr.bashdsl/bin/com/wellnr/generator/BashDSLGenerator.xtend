@@ -4,13 +4,18 @@
 package com.wellnr.generator
 
 import com.google.inject.Inject
+import com.wellnr.bashDSL.AbstractArgument
 import com.wellnr.bashDSL.Argument
+import com.wellnr.bashDSL.OptionalArgument
 import com.wellnr.bashDSL.Script
 import java.util.Calendar
 import java.util.List
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
+import com.wellnr.bashDSL.EnvironmentVariable
+import com.wellnr.bashDSL.Domainmodel
+import com.wellnr.bashDSL.Function
 
 /**
  * Generates code from your model files on save.
@@ -19,116 +24,189 @@ import org.eclipse.xtext.generator.IGenerator
  */
 class BashDSLGenerator implements IGenerator {
 
-	@Inject
-	extension StringUtil stringUtil
+  @Inject
+  extension StringUtil stringUtil
 
-	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(typeof(Greeting))
-//				.map[name]
-//				.join(', '))
-		  resource.allContents.filter(typeof(Script)).forEach [ script |
-			fsa.generateFile(script.name + ".sh", doGenerate(script).toString())
-		]
-	}
+  override void doGenerate(Resource resource, IFileSystemAccess fsa) {
+    resource //
+    .allContents //
+    .filter(typeof(Script)) //
+    .forEach [ script |
+      println("Generating " + script.name + ".sh")
+      fsa.generateFile(script.name + ".sh", doGenerate(script).toString())
+    ]
+    
+    resource
+    .allContents
+    .filter(typeof(Domainmodel)) //
+    .forEach [ model |
+      if (model.readmeTitle != null) {
+        println("Generating README.md")
+        fsa.generateFile("README.md", model.doGenerateReadme)
+      }
+    ]
+  }
 
-	private def doGenerate(Script script) {
-		'''
+  private def doGenerate(Script script) {
+    '''
       #!/bin/bash
       #
-      # (c) «IF script.copyright != null» «script.copyright» «ELSE»michael.wellner@de.ibm.com «Calendar.getInstance().get(Calendar.YEAR)».«ENDIF»
+      # (c) «IF script.copyright != null» «script.copyright.ensureSentence» «ELSE»michael.wellner@de.ibm.com «Calendar.getInstance().get(Calendar.YEAR)».«ENDIF»
       #
       «doGenerateHelp(script).toString().comment»
       #
-
-      «doGenerateInitialize(script.arguments)»
-
+      
+      # Fail if one of the commands fails
+      set -e
+      
+      CURRENTDIR=`pwd`
+      BASEDIR=$(dirname $0)
+      «doGenerateInitialize((script.arguments + script.optArguments).toList, script.variables)»
+      
       main() {
-        read_variables $@
-        check_required
-        init_defaults
+        cd ${BASEDIR} 
+        read_variables "$@"
+        «IF script.arguments.length > 0»
+          check_required
+        «ENDIF»
+        «IF script.optArguments.filter[^default != null].length > 0»
+          init_defaults
+        «ENDIF»
         
-        «script.code.replace("\"\"\"", "").trimLines»
-      }
-
-      check_required() {
-        «doGenerateCheck(script.arguments)»
-      }
-
-      init_defaults() {
-      	«doGenerateDefaults(script.arguments)»
+        «script.code.replace("{{{", "").replace("}}}", "").trimLines»
+        cd ${CURRENTDIR}
       }
       
+      «IF script.arguments.length > 0»
+      check_required() {
+        «doGenerateCheck(script.arguments, script.variables)»
+      }
+      
+      «ENDIF»
+      «IF script.optArguments.filter[^default != null].length > 0»
+      init_defaults() {
+      	«doGenerateDefaults(script.optArguments)»
+      }
+      
+      «ENDIF»
       read_variables() {
-        «doGenerateRead(script.arguments)»
+        «doGenerateRead((script.arguments + script.optArguments).toList)»
       }
       
       show_help_and_exit() {
-        «doGenerateHelp(script).toString().echo»
+        «doGenerateHelp(script).toString().escape.echo»
         echo
         sleep 3
+        
+        cd ${CURRENTDIR}
         exit $1
       }
+      
+      «FOR func : script.functions»
+        «func.doGenerate»
+      «ENDFOR»
+      
+      main "$@"
+    '''
+  }
+  
+  private def doGenerate(Function func) {
+    '''
+      «func.name»() {
+        «func.code.replace("{{{", "").replace("}}}", "").trimLines»
+      }
+    '''
+  }
 
-      main $@
-		'''
-	}
-	
-	private def doGenerateCheck(List<Argument> arguments) {
-		'''
-      «FOR arg : arguments.filter[!optional]»
-        if [ -z "«arg.name.variable»"]; then
+  private def doGenerateCheck(List<Argument> arguments, List<EnvironmentVariable> variables) {
+    '''
+      «FOR variable : variables.filter[^default == null]»
+        if [ -z "«variable.name.variable»" ]; then
+          >&2 echo "Missing required environment variable: «variable.name»."
+          show_help_and_exit 1
+        fi;
+      «ENDFOR»
+      «FOR arg : arguments»
+        if [ -z "«arg.name.variable»" ]; then
           >&2 echo "Missing required parameter: «arg.name»."
           show_help_and_exit 1
         fi;
       «ENDFOR»      
-		'''
-	}
-	
-	private def doGenerateDefaults(List<Argument> arguments) {
+    '''
+  }
+
+  private def doGenerateDefaults(List<OptionalArgument> arguments) {
     '''
       «FOR arg : arguments.filter[^default != null]»
-        if [ -z "«arg.name.variable»"]; then
-          «arg.name.variableName»="«arg.^default»"
+        if [ -z "«arg.name.variable»" ]; then
+          «IF arg.dynamicDefault»
+            «arg.name.variableName»=«arg.^default»
+          «ELSE»
+            «arg.name.variableName»="«arg.^default»"
+          «ENDIF»
         fi;
       «ENDFOR»
     '''
   }
 
-	private def doGenerateHelp(Script script) {
-		'''
+  private def doGenerateHelp(Script script) {
+    '''
       This script «script.description.ensureSentence»
-
-      Usage:
-      «script.name» [ -h | --help | OPTIONS ]
-
-      Options:
-        «FOR arg : script.arguments»
-          «doGenerateHelp(arg)»
+      «IF script.longDescription != null»
+        
+        «script.longDescription.value.replace("{{{", "").replace("}}}", "").trimLines»
+      «ENDIF»
+      «IF script.variables.length > 0»
+        
+        The following environment variables are used by the script:
+        
+        «FOR variable : script.variables»
+          * «variable.name» - «variable.description.ensureSentence» «IF variable.^default != null» Default: «variable.^default».«ENDIF»
         «ENDFOR»
-		'''
-	}
+      «ENDIF»
+      
+      Usage:
+      «script.name».sh [ -h | --help | OPTIONS ]
+      
+      «IF (script.arguments + script.optArguments).length > 0»
+        Options:
+          «FOR arg : (script.arguments + script.optArguments)»
+            «doGenerateHelp(arg)»
+          «ENDFOR»
+      «ENDIF»
+    '''
+  }
 
-	private def doGenerateHelp(Argument argument) {
-		'''
+  private def doGenerateHelp(AbstractArgument argument) {
+    '''
       «argument.name»
-        «IF (argument.optional)»Optional. «ENDIF»«IF (argument.^default != null)»Default: «argument.^default».«ENDIF»
+        «IF (argument instanceof OptionalArgument)»Optional.«IF (argument.^default != null)» Default: «argument.^default».«ENDIF»«ENDIF»
         «argument.description.ensureSentence»
-		'''
-	}
-	
-	private def doGenerateInitialize(List<Argument> arguments) {
-		'''
+    '''
+  }
+
+  private def doGenerateInitialize(List<AbstractArgument> arguments, List<EnvironmentVariable> variables) {
+    '''
       «FOR arg : arguments»
         «arg.name.variableName»=
       «ENDFOR»
-		'''
-	}	
-	
-	private def doGenerateRead(List<Argument> arguments) {
-		'''
-      while [[ $# > 0 ]]
+      
+      «FOR variable : variables.filter[^default != null]»
+        «variable.name»=«variable.name.variable»
+        if [ -z «variable.name.variable» ]; then
+          «IF variable.dynamicDefault»
+            «variable.name»=«variable.^default»
+          «ELSE»
+            «variable.name»="«variable.^default»"
+          «ENDIF»
+        fi;
+      «ENDFOR»
+    '''
+  }
+
+  private def doGenerateRead(List<AbstractArgument> arguments) {
+    '''
+      while [[ $# -gt 0 ]]
       do
         key="$1"
         case $key in
@@ -141,16 +219,77 @@ class BashDSLGenerator implements IGenerator {
             show_help_and_exit 2
             ;;
         esac
-        shift # past argument
-        shift # past argument
       done
-		'''
-	}
-	
-	private def doGenerateRead(Argument argument) {
-		'''
-		«argument.name»)
-		  «argument.name.variableName»="$2";;
-		'''
-	}
+    '''
+  }
+
+  private def doGenerateRead(AbstractArgument argument) {
+    '''
+      «argument.name»)
+        «IF argument instanceof OptionalArgument && (argument as OptionalArgument).isIsBoolean»
+          «argument.name.variableName»=true
+          shift # past argument
+          ;;
+        «ELSEIF argument.remaining»
+          «argument.name.variableName»="${@:2}";break;;
+        «ELSE»
+          «argument.name.variableName»="$2"
+          shift # past argument
+          shift # past argument
+          ;;
+        «ENDIF»
+    '''
+  }
+  
+  private def doGenerateReadme(Domainmodel model) {
+    '''
+      # «model.readmeTitle»
+      
+      «model.readmeIntro»
+      
+      «FOR script : model.elements»
+        «script.doGenerateReadme»
+      «ENDFOR»
+    '''
+  }
+  
+  private def doGenerateReadme(Script script) {
+    '''
+      ## «script.name».sh
+      
+      This script «script.description.ensureSentence»
+      «IF script.longDescription != null»
+        
+        «script.longDescription.value.replace("{{{", "").replace("}}}", "").trimLines»
+      «ENDIF»
+      «IF script.variables.length > 0»
+        
+        The following environment variables are used by the script:
+        
+        «FOR variable : script.variables»
+          * **«variable.name»** - «variable.description.ensureSentence»«IF variable.^default != null» *Default: «variable.^default».*«ENDIF»
+        «ENDFOR»
+      «ENDIF»
+      
+      Usage:
+      
+      ```
+      «script.name».sh [ -h | --help | OPTIONS ]
+      ```
+      
+      «IF (script.arguments + script.optArguments).length > 0»
+        Options:
+          «FOR arg : (script.arguments + script.optArguments)»
+            «doGenerateReadme(arg)»
+          «ENDFOR»
+      «ENDIF»
+      
+    '''
+  }
+  
+  private def doGenerateReadme(AbstractArgument argument) {
+    '''
+      * **«argument.name»** - «argument.description.ensureSentence» «IF (argument instanceof OptionalArgument)»*Optional.«IF (argument.^default != null)» Default: «argument.^default».«ENDIF»*«ENDIF»
+    '''
+  }
 }

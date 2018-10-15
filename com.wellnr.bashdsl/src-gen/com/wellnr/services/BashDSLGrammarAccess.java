@@ -20,18 +20,54 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public class DomainmodelElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Domainmodel");
-		private final Assignment cElementsAssignment = (Assignment)rule.eContents().get(1);
-		private final RuleCall cElementsScriptParserRuleCall_0 = (RuleCall)cElementsAssignment.eContents().get(0);
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cGenerateReadmeKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cReadmeTitleAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cReadmeTitleSTRINGTerminalRuleCall_1_0 = (RuleCall)cReadmeTitleAssignment_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cCommaKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cReadmeIntroAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cReadmeIntroSTRINGTerminalRuleCall_2_1_0 = (RuleCall)cReadmeIntroAssignment_2_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cElementsAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cElementsScriptParserRuleCall_4_0 = (RuleCall)cElementsAssignment_4.eContents().get(0);
 		
 		//Domainmodel:
-		//	elements+=Script*;
+		//	"@GenerateReadme(" readmeTitle=STRING ("," readmeIntro=STRING)? ")" elements+=Script*;
 		@Override public ParserRule getRule() { return rule; }
 
+		//"@GenerateReadme(" readmeTitle=STRING ("," readmeIntro=STRING)? ")" elements+=Script*
+		public Group getGroup() { return cGroup; }
+
+		//"@GenerateReadme("
+		public Keyword getGenerateReadmeKeyword_0() { return cGenerateReadmeKeyword_0; }
+
+		//readmeTitle=STRING
+		public Assignment getReadmeTitleAssignment_1() { return cReadmeTitleAssignment_1; }
+
+		//STRING
+		public RuleCall getReadmeTitleSTRINGTerminalRuleCall_1_0() { return cReadmeTitleSTRINGTerminalRuleCall_1_0; }
+
+		//("," readmeIntro=STRING)?
+		public Group getGroup_2() { return cGroup_2; }
+
+		//","
+		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
+
+		//readmeIntro=STRING
+		public Assignment getReadmeIntroAssignment_2_1() { return cReadmeIntroAssignment_2_1; }
+
+		//STRING
+		public RuleCall getReadmeIntroSTRINGTerminalRuleCall_2_1_0() { return cReadmeIntroSTRINGTerminalRuleCall_2_1_0; }
+
+		//")"
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+
 		//elements+=Script*
-		public Assignment getElementsAssignment() { return cElementsAssignment; }
+		public Assignment getElementsAssignment_4() { return cElementsAssignment_4; }
 
 		//Script
-		public RuleCall getElementsScriptParserRuleCall_0() { return cElementsScriptParserRuleCall_0; }
+		public RuleCall getElementsScriptParserRuleCall_4_0() { return cElementsScriptParserRuleCall_4_0; }
 	}
 
 	public class ScriptElements extends AbstractParserRuleElementFinder {
@@ -39,7 +75,7 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cScriptKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cNameFILENAMETerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
 		private final Assignment cDescriptionAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cDescriptionSTRINGTerminalRuleCall_2_0 = (RuleCall)cDescriptionAssignment_2.eContents().get(0);
 		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
@@ -47,28 +83,39 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cCopyrightAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final RuleCall cCopyrightSTRINGTerminalRuleCall_3_1_0 = (RuleCall)cCopyrightAssignment_3_1.eContents().get(0);
 		private final Keyword cLeftCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
-		private final Assignment cArgumentsAssignment_5 = (Assignment)cGroup.eContents().get(5);
-		private final RuleCall cArgumentsArgumentParserRuleCall_5_0 = (RuleCall)cArgumentsAssignment_5.eContents().get(0);
-		private final Assignment cCodeAssignment_6 = (Assignment)cGroup.eContents().get(6);
-		private final RuleCall cCodeCODE_BLOCKTerminalRuleCall_6_0 = (RuleCall)cCodeAssignment_6.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cLongDescriptionAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cLongDescriptionDescriptionParserRuleCall_5_0 = (RuleCall)cLongDescriptionAssignment_5.eContents().get(0);
+		private final Assignment cVariablesAssignment_6 = (Assignment)cGroup.eContents().get(6);
+		private final RuleCall cVariablesEnvironmentVariableParserRuleCall_6_0 = (RuleCall)cVariablesAssignment_6.eContents().get(0);
+		private final Assignment cArgumentsAssignment_7 = (Assignment)cGroup.eContents().get(7);
+		private final RuleCall cArgumentsArgumentParserRuleCall_7_0 = (RuleCall)cArgumentsAssignment_7.eContents().get(0);
+		private final Assignment cOptArgumentsAssignment_8 = (Assignment)cGroup.eContents().get(8);
+		private final RuleCall cOptArgumentsOptionalArgumentParserRuleCall_8_0 = (RuleCall)cOptArgumentsAssignment_8.eContents().get(0);
+		private final Assignment cFunctionsAssignment_9 = (Assignment)cGroup.eContents().get(9);
+		private final RuleCall cFunctionsFunctionParserRuleCall_9_0 = (RuleCall)cFunctionsAssignment_9.eContents().get(0);
+		private final Assignment cCodeAssignment_10 = (Assignment)cGroup.eContents().get(10);
+		private final RuleCall cCodeCODE_BLOCKTerminalRuleCall_10_0 = (RuleCall)cCodeAssignment_10.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_11 = (Keyword)cGroup.eContents().get(11);
 		
 		//Script:
-		//	"script" name=FILENAME description=STRING ("copyright" copyright=STRING)? "{" arguments+=Argument* code=CODE_BLOCK?
-		//	"}";
+		//	"script" name=ID description=STRING ("copyright" copyright=STRING)? "{" longDescription=Description?
+		//	variables+=EnvironmentVariable* arguments+=Argument* optArguments+=OptionalArgument* functions+=Function*
+		//	code=CODE_BLOCK "}";
 		@Override public ParserRule getRule() { return rule; }
 
-		//"script" name=FILENAME description=STRING ("copyright" copyright=STRING)? "{" arguments+=Argument* code=CODE_BLOCK? "}"
+		//"script" name=ID description=STRING ("copyright" copyright=STRING)? "{" longDescription=Description?
+		//variables+=EnvironmentVariable* arguments+=Argument* optArguments+=OptionalArgument* functions+=Function*
+		//code=CODE_BLOCK "}"
 		public Group getGroup() { return cGroup; }
 
 		//"script"
 		public Keyword getScriptKeyword_0() { return cScriptKeyword_0; }
 
-		//name=FILENAME
+		//name=ID
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
 
-		//FILENAME
-		public RuleCall getNameFILENAMETerminalRuleCall_1_0() { return cNameFILENAMETerminalRuleCall_1_0; }
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_1_0() { return cNameIDTerminalRuleCall_1_0; }
 
 		//description=STRING
 		public Assignment getDescriptionAssignment_2() { return cDescriptionAssignment_2; }
@@ -91,83 +138,319 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 		//"{"
 		public Keyword getLeftCurlyBracketKeyword_4() { return cLeftCurlyBracketKeyword_4; }
 
+		//longDescription=Description?
+		public Assignment getLongDescriptionAssignment_5() { return cLongDescriptionAssignment_5; }
+
+		//Description
+		public RuleCall getLongDescriptionDescriptionParserRuleCall_5_0() { return cLongDescriptionDescriptionParserRuleCall_5_0; }
+
+		//variables+=EnvironmentVariable*
+		public Assignment getVariablesAssignment_6() { return cVariablesAssignment_6; }
+
+		//EnvironmentVariable
+		public RuleCall getVariablesEnvironmentVariableParserRuleCall_6_0() { return cVariablesEnvironmentVariableParserRuleCall_6_0; }
+
 		//arguments+=Argument*
-		public Assignment getArgumentsAssignment_5() { return cArgumentsAssignment_5; }
+		public Assignment getArgumentsAssignment_7() { return cArgumentsAssignment_7; }
 
 		//Argument
-		public RuleCall getArgumentsArgumentParserRuleCall_5_0() { return cArgumentsArgumentParserRuleCall_5_0; }
+		public RuleCall getArgumentsArgumentParserRuleCall_7_0() { return cArgumentsArgumentParserRuleCall_7_0; }
 
-		//code=CODE_BLOCK?
-		public Assignment getCodeAssignment_6() { return cCodeAssignment_6; }
+		//optArguments+=OptionalArgument*
+		public Assignment getOptArgumentsAssignment_8() { return cOptArgumentsAssignment_8; }
+
+		//OptionalArgument
+		public RuleCall getOptArgumentsOptionalArgumentParserRuleCall_8_0() { return cOptArgumentsOptionalArgumentParserRuleCall_8_0; }
+
+		//functions+=Function*
+		public Assignment getFunctionsAssignment_9() { return cFunctionsAssignment_9; }
+
+		//Function
+		public RuleCall getFunctionsFunctionParserRuleCall_9_0() { return cFunctionsFunctionParserRuleCall_9_0; }
+
+		//code=CODE_BLOCK
+		public Assignment getCodeAssignment_10() { return cCodeAssignment_10; }
 
 		//CODE_BLOCK
-		public RuleCall getCodeCODE_BLOCKTerminalRuleCall_6_0() { return cCodeCODE_BLOCKTerminalRuleCall_6_0; }
+		public RuleCall getCodeCODE_BLOCKTerminalRuleCall_10_0() { return cCodeCODE_BLOCKTerminalRuleCall_10_0; }
 
 		//"}"
-		public Keyword getRightCurlyBracketKeyword_7() { return cRightCurlyBracketKeyword_7; }
+		public Keyword getRightCurlyBracketKeyword_11() { return cRightCurlyBracketKeyword_11; }
+	}
+
+	public class DescriptionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Description");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cDescriptionKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cValueAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cValueCODE_BLOCKTerminalRuleCall_1_0 = (RuleCall)cValueAssignment_1.eContents().get(0);
+		
+		//Description:
+		//	"description" value=CODE_BLOCK;
+		@Override public ParserRule getRule() { return rule; }
+
+		//"description" value=CODE_BLOCK
+		public Group getGroup() { return cGroup; }
+
+		//"description"
+		public Keyword getDescriptionKeyword_0() { return cDescriptionKeyword_0; }
+
+		//value=CODE_BLOCK
+		public Assignment getValueAssignment_1() { return cValueAssignment_1; }
+
+		//CODE_BLOCK
+		public RuleCall getValueCODE_BLOCKTerminalRuleCall_1_0() { return cValueCODE_BLOCKTerminalRuleCall_1_0; }
+	}
+
+	public class AbstractArgumentElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "AbstractArgument");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cArgumentParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cOptionalArgumentParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		
+		//AbstractArgument:
+		//	Argument | OptionalArgument;
+		@Override public ParserRule getRule() { return rule; }
+
+		//Argument | OptionalArgument
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//Argument
+		public RuleCall getArgumentParserRuleCall_0() { return cArgumentParserRuleCall_0; }
+
+		//OptionalArgument
+		public RuleCall getOptionalArgumentParserRuleCall_1() { return cOptionalArgumentParserRuleCall_1; }
 	}
 
 	public class ArgumentElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Argument");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cOptionalAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final Keyword cOptionalOptionalKeyword_0_0 = (Keyword)cOptionalAssignment_0.eContents().get(0);
-		private final Keyword cArgumentKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cNameSTRINGTerminalRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
-		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
-		private final Keyword cWithDefaultKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final Assignment cDefaultAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cDefaultSTRINGTerminalRuleCall_3_1_0 = (RuleCall)cDefaultAssignment_3_1.eContents().get(0);
-		private final Assignment cDescriptionAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cDescriptionSTRINGTerminalRuleCall_4_0 = (RuleCall)cDescriptionAssignment_4.eContents().get(0);
+		private final Keyword cArgumentKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNameSTRINGTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final Assignment cRemainingAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final Keyword cRemainingReadsRemainingKeyword_2_0 = (Keyword)cRemainingAssignment_2.eContents().get(0);
+		private final Assignment cDescriptionAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cDescriptionSTRINGTerminalRuleCall_3_0 = (RuleCall)cDescriptionAssignment_3.eContents().get(0);
 		
 		//Argument:
-		//	optional?="optional"? "argument" name=STRING ("with default" default=STRING)? description=STRING;
+		//	"argument" name=STRING remaining?="reads remaining"? description=STRING;
 		@Override public ParserRule getRule() { return rule; }
 
-		//optional?="optional"? "argument" name=STRING ("with default" default=STRING)? description=STRING
+		//"argument" name=STRING remaining?="reads remaining"? description=STRING
 		public Group getGroup() { return cGroup; }
 
-		//optional?="optional"?
-		public Assignment getOptionalAssignment_0() { return cOptionalAssignment_0; }
-
-		//"optional"
-		public Keyword getOptionalOptionalKeyword_0_0() { return cOptionalOptionalKeyword_0_0; }
-
 		//"argument"
-		public Keyword getArgumentKeyword_1() { return cArgumentKeyword_1; }
+		public Keyword getArgumentKeyword_0() { return cArgumentKeyword_0; }
 
 		//name=STRING
-		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
+		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
 
 		//STRING
-		public RuleCall getNameSTRINGTerminalRuleCall_2_0() { return cNameSTRINGTerminalRuleCall_2_0; }
+		public RuleCall getNameSTRINGTerminalRuleCall_1_0() { return cNameSTRINGTerminalRuleCall_1_0; }
 
-		//("with default" default=STRING)?
-		public Group getGroup_3() { return cGroup_3; }
+		//remaining?="reads remaining"?
+		public Assignment getRemainingAssignment_2() { return cRemainingAssignment_2; }
 
-		//"with default"
-		public Keyword getWithDefaultKeyword_3_0() { return cWithDefaultKeyword_3_0; }
-
-		//default=STRING
-		public Assignment getDefaultAssignment_3_1() { return cDefaultAssignment_3_1; }
-
-		//STRING
-		public RuleCall getDefaultSTRINGTerminalRuleCall_3_1_0() { return cDefaultSTRINGTerminalRuleCall_3_1_0; }
+		//"reads remaining"
+		public Keyword getRemainingReadsRemainingKeyword_2_0() { return cRemainingReadsRemainingKeyword_2_0; }
 
 		//description=STRING
-		public Assignment getDescriptionAssignment_4() { return cDescriptionAssignment_4; }
+		public Assignment getDescriptionAssignment_3() { return cDescriptionAssignment_3; }
 
 		//STRING
-		public RuleCall getDescriptionSTRINGTerminalRuleCall_4_0() { return cDescriptionSTRINGTerminalRuleCall_4_0; }
+		public RuleCall getDescriptionSTRINGTerminalRuleCall_3_0() { return cDescriptionSTRINGTerminalRuleCall_3_0; }
+	}
+
+	public class OptionalArgumentElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "OptionalArgument");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cOptionalArgumentKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNameSTRINGTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
+		private final Alternatives cAlternatives_2_0 = (Alternatives)cAlternatives_2.eContents().get(0);
+		private final Group cGroup_2_0_0 = (Group)cAlternatives_2_0.eContents().get(0);
+		private final Keyword cWithKeyword_2_0_0_0 = (Keyword)cGroup_2_0_0.eContents().get(0);
+		private final Assignment cDynamicDefaultAssignment_2_0_0_1 = (Assignment)cGroup_2_0_0.eContents().get(1);
+		private final Keyword cDynamicDefaultDynamicKeyword_2_0_0_1_0 = (Keyword)cDynamicDefaultAssignment_2_0_0_1.eContents().get(0);
+		private final Keyword cDefaultKeyword_2_0_0_2 = (Keyword)cGroup_2_0_0.eContents().get(2);
+		private final Assignment cDefaultAssignment_2_0_0_3 = (Assignment)cGroup_2_0_0.eContents().get(3);
+		private final RuleCall cDefaultSTRINGTerminalRuleCall_2_0_0_3_0 = (RuleCall)cDefaultAssignment_2_0_0_3.eContents().get(0);
+		private final Assignment cRemainingAssignment_2_0_1 = (Assignment)cAlternatives_2_0.eContents().get(1);
+		private final Keyword cRemainingReadsRemainingKeyword_2_0_1_0 = (Keyword)cRemainingAssignment_2_0_1.eContents().get(0);
+		private final Assignment cIsBooleanAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
+		private final Keyword cIsBooleanWithoutParameterKeyword_2_1_0 = (Keyword)cIsBooleanAssignment_2_1.eContents().get(0);
+		private final Assignment cDescriptionAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cDescriptionSTRINGTerminalRuleCall_3_0 = (RuleCall)cDescriptionAssignment_3.eContents().get(0);
+		
+		//OptionalArgument:
+		//	"optional argument" name=STRING (("with" dynamicDefault?="dynamic"? "default" default=STRING |
+		//	remaining?="reads remaining") | isBoolean?="without parameter")? description=STRING;
+		@Override public ParserRule getRule() { return rule; }
+
+		//"optional argument" name=STRING (("with" dynamicDefault?="dynamic"? "default" default=STRING |
+		//remaining?="reads remaining") | isBoolean?="without parameter")? description=STRING
+		public Group getGroup() { return cGroup; }
+
+		//"optional argument"
+		public Keyword getOptionalArgumentKeyword_0() { return cOptionalArgumentKeyword_0; }
+
+		//name=STRING
+		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
+
+		//STRING
+		public RuleCall getNameSTRINGTerminalRuleCall_1_0() { return cNameSTRINGTerminalRuleCall_1_0; }
+
+		//(("with" dynamicDefault?="dynamic"? "default" default=STRING | remaining?="reads remaining") |
+		//isBoolean?="without parameter")?
+		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+
+		//"with" dynamicDefault?="dynamic"? "default" default=STRING | remaining?="reads remaining"
+		public Alternatives getAlternatives_2_0() { return cAlternatives_2_0; }
+
+		//"with" dynamicDefault?="dynamic"? "default" default=STRING
+		public Group getGroup_2_0_0() { return cGroup_2_0_0; }
+
+		//"with"
+		public Keyword getWithKeyword_2_0_0_0() { return cWithKeyword_2_0_0_0; }
+
+		//dynamicDefault?="dynamic"?
+		public Assignment getDynamicDefaultAssignment_2_0_0_1() { return cDynamicDefaultAssignment_2_0_0_1; }
+
+		//"dynamic"
+		public Keyword getDynamicDefaultDynamicKeyword_2_0_0_1_0() { return cDynamicDefaultDynamicKeyword_2_0_0_1_0; }
+
+		//"default"
+		public Keyword getDefaultKeyword_2_0_0_2() { return cDefaultKeyword_2_0_0_2; }
+
+		//default=STRING
+		public Assignment getDefaultAssignment_2_0_0_3() { return cDefaultAssignment_2_0_0_3; }
+
+		//STRING
+		public RuleCall getDefaultSTRINGTerminalRuleCall_2_0_0_3_0() { return cDefaultSTRINGTerminalRuleCall_2_0_0_3_0; }
+
+		//remaining?="reads remaining"
+		public Assignment getRemainingAssignment_2_0_1() { return cRemainingAssignment_2_0_1; }
+
+		//"reads remaining"
+		public Keyword getRemainingReadsRemainingKeyword_2_0_1_0() { return cRemainingReadsRemainingKeyword_2_0_1_0; }
+
+		//isBoolean?="without parameter"
+		public Assignment getIsBooleanAssignment_2_1() { return cIsBooleanAssignment_2_1; }
+
+		//"without parameter"
+		public Keyword getIsBooleanWithoutParameterKeyword_2_1_0() { return cIsBooleanWithoutParameterKeyword_2_1_0; }
+
+		//description=STRING
+		public Assignment getDescriptionAssignment_3() { return cDescriptionAssignment_3; }
+
+		//STRING
+		public RuleCall getDescriptionSTRINGTerminalRuleCall_3_0() { return cDescriptionSTRINGTerminalRuleCall_3_0; }
+	}
+
+	public class EnvironmentVariableElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "EnvironmentVariable");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cEnvKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cWithKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cDynamicDefaultAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final Keyword cDynamicDefaultDynamicKeyword_2_1_0 = (Keyword)cDynamicDefaultAssignment_2_1.eContents().get(0);
+		private final Keyword cDefaultKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
+		private final Assignment cDefaultAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
+		private final RuleCall cDefaultSTRINGTerminalRuleCall_2_3_0 = (RuleCall)cDefaultAssignment_2_3.eContents().get(0);
+		private final Assignment cDescriptionAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cDescriptionSTRINGTerminalRuleCall_3_0 = (RuleCall)cDescriptionAssignment_3.eContents().get(0);
+		
+		//EnvironmentVariable:
+		//	"env" name=ID ("with" dynamicDefault?="dynamic"? "default" default=STRING)? description=STRING;
+		@Override public ParserRule getRule() { return rule; }
+
+		//"env" name=ID ("with" dynamicDefault?="dynamic"? "default" default=STRING)? description=STRING
+		public Group getGroup() { return cGroup; }
+
+		//"env"
+		public Keyword getEnvKeyword_0() { return cEnvKeyword_0; }
+
+		//name=ID
+		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
+
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_1_0() { return cNameIDTerminalRuleCall_1_0; }
+
+		//("with" dynamicDefault?="dynamic"? "default" default=STRING)?
+		public Group getGroup_2() { return cGroup_2; }
+
+		//"with"
+		public Keyword getWithKeyword_2_0() { return cWithKeyword_2_0; }
+
+		//dynamicDefault?="dynamic"?
+		public Assignment getDynamicDefaultAssignment_2_1() { return cDynamicDefaultAssignment_2_1; }
+
+		//"dynamic"
+		public Keyword getDynamicDefaultDynamicKeyword_2_1_0() { return cDynamicDefaultDynamicKeyword_2_1_0; }
+
+		//"default"
+		public Keyword getDefaultKeyword_2_2() { return cDefaultKeyword_2_2; }
+
+		//default=STRING
+		public Assignment getDefaultAssignment_2_3() { return cDefaultAssignment_2_3; }
+
+		//STRING
+		public RuleCall getDefaultSTRINGTerminalRuleCall_2_3_0() { return cDefaultSTRINGTerminalRuleCall_2_3_0; }
+
+		//description=STRING
+		public Assignment getDescriptionAssignment_3() { return cDescriptionAssignment_3; }
+
+		//STRING
+		public RuleCall getDescriptionSTRINGTerminalRuleCall_3_0() { return cDescriptionSTRINGTerminalRuleCall_3_0; }
+	}
+
+	public class FunctionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "Function");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cDefKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNameIDTerminalRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final Assignment cCodeAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cCodeCODE_BLOCKTerminalRuleCall_2_0 = (RuleCall)cCodeAssignment_2.eContents().get(0);
+		
+		//Function:
+		//	"def" name=ID code=CODE_BLOCK;
+		@Override public ParserRule getRule() { return rule; }
+
+		//"def" name=ID code=CODE_BLOCK
+		public Group getGroup() { return cGroup; }
+
+		//"def"
+		public Keyword getDefKeyword_0() { return cDefKeyword_0; }
+
+		//name=ID
+		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
+
+		//ID
+		public RuleCall getNameIDTerminalRuleCall_1_0() { return cNameIDTerminalRuleCall_1_0; }
+
+		//code=CODE_BLOCK
+		public Assignment getCodeAssignment_2() { return cCodeAssignment_2; }
+
+		//CODE_BLOCK
+		public RuleCall getCodeCODE_BLOCKTerminalRuleCall_2_0() { return cCodeCODE_BLOCKTerminalRuleCall_2_0; }
 	}
 	
 	
 	private final DomainmodelElements pDomainmodel;
 	private final ScriptElements pScript;
+	private final DescriptionElements pDescription;
+	private final AbstractArgumentElements pAbstractArgument;
 	private final ArgumentElements pArgument;
-	private final TerminalRule tFILENAME;
+	private final OptionalArgumentElements pOptionalArgument;
+	private final EnvironmentVariableElements pEnvironmentVariable;
+	private final FunctionElements pFunction;
+	private final TerminalRule tID;
 	private final TerminalRule tCODE_BLOCK;
 	
 	private final Grammar grammar;
@@ -181,8 +464,13 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 		this.gaTerminals = gaTerminals;
 		this.pDomainmodel = new DomainmodelElements();
 		this.pScript = new ScriptElements();
+		this.pDescription = new DescriptionElements();
+		this.pAbstractArgument = new AbstractArgumentElements();
 		this.pArgument = new ArgumentElements();
-		this.tFILENAME = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "FILENAME");
+		this.pOptionalArgument = new OptionalArgumentElements();
+		this.pEnvironmentVariable = new EnvironmentVariableElements();
+		this.pFunction = new FunctionElements();
+		this.tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "ID");
 		this.tCODE_BLOCK = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "CODE_BLOCK");
 	}
 	
@@ -214,7 +502,7 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//Domainmodel:
-	//	elements+=Script*;
+	//	"@GenerateReadme(" readmeTitle=STRING ("," readmeIntro=STRING)? ")" elements+=Script*;
 	public DomainmodelElements getDomainmodelAccess() {
 		return pDomainmodel;
 	}
@@ -224,8 +512,9 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Script:
-	//	"script" name=FILENAME description=STRING ("copyright" copyright=STRING)? "{" arguments+=Argument* code=CODE_BLOCK?
-	//	"}";
+	//	"script" name=ID description=STRING ("copyright" copyright=STRING)? "{" longDescription=Description?
+	//	variables+=EnvironmentVariable* arguments+=Argument* optArguments+=OptionalArgument* functions+=Function*
+	//	code=CODE_BLOCK "}";
 	public ScriptElements getScriptAccess() {
 		return pScript;
 	}
@@ -234,8 +523,28 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 		return getScriptAccess().getRule();
 	}
 
+	//Description:
+	//	"description" value=CODE_BLOCK;
+	public DescriptionElements getDescriptionAccess() {
+		return pDescription;
+	}
+	
+	public ParserRule getDescriptionRule() {
+		return getDescriptionAccess().getRule();
+	}
+
+	//AbstractArgument:
+	//	Argument | OptionalArgument;
+	public AbstractArgumentElements getAbstractArgumentAccess() {
+		return pAbstractArgument;
+	}
+	
+	public ParserRule getAbstractArgumentRule() {
+		return getAbstractArgumentAccess().getRule();
+	}
+
 	//Argument:
-	//	optional?="optional"? "argument" name=STRING ("with default" default=STRING)? description=STRING;
+	//	"argument" name=STRING remaining?="reads remaining"? description=STRING;
 	public ArgumentElements getArgumentAccess() {
 		return pArgument;
 	}
@@ -244,22 +553,47 @@ public class BashDSLGrammarAccess extends AbstractGrammarElementFinder {
 		return getArgumentAccess().getRule();
 	}
 
-	//terminal FILENAME:
-	//	("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "-" | "." | "0".."9")*;
-	public TerminalRule getFILENAMERule() {
-		return tFILENAME;
+	//OptionalArgument:
+	//	"optional argument" name=STRING (("with" dynamicDefault?="dynamic"? "default" default=STRING |
+	//	remaining?="reads remaining") | isBoolean?="without parameter")? description=STRING;
+	public OptionalArgumentElements getOptionalArgumentAccess() {
+		return pOptionalArgument;
+	}
+	
+	public ParserRule getOptionalArgumentRule() {
+		return getOptionalArgumentAccess().getRule();
+	}
+
+	//EnvironmentVariable:
+	//	"env" name=ID ("with" dynamicDefault?="dynamic"? "default" default=STRING)? description=STRING;
+	public EnvironmentVariableElements getEnvironmentVariableAccess() {
+		return pEnvironmentVariable;
+	}
+	
+	public ParserRule getEnvironmentVariableRule() {
+		return getEnvironmentVariableAccess().getRule();
+	}
+
+	//Function:
+	//	"def" name=ID code=CODE_BLOCK;
+	public FunctionElements getFunctionAccess() {
+		return pFunction;
+	}
+	
+	public ParserRule getFunctionRule() {
+		return getFunctionAccess().getRule();
+	}
+
+	//terminal ID:
+	//	("a".."z" | "A".."Z") ("a".."z" | "A".."Z" | "_" | "-" | "0".."9")*;
+	public TerminalRule getIDRule() {
+		return tID;
 	} 
 
 	//terminal CODE_BLOCK:
-	//	"\"\"\""->"\"\"\"";
+	//	"{{{"->"}}}";
 	public TerminalRule getCODE_BLOCKRule() {
 		return tCODE_BLOCK;
-	} 
-
-	//terminal ID:
-	//	"^"? ("a".."z" | "A".."Z" | "_") ("a".."z" | "A".."Z" | "_" | "0".."9")*;
-	public TerminalRule getIDRule() {
-		return gaTerminals.getIDRule();
 	} 
 
 	//terminal INT returns ecore::EInt:

@@ -2,10 +2,15 @@
  */
 package com.wellnr.bashDSL.impl;
 
+import com.wellnr.bashDSL.AbstractArgument;
 import com.wellnr.bashDSL.Argument;
 import com.wellnr.bashDSL.BashDSLFactory;
 import com.wellnr.bashDSL.BashDSLPackage;
+import com.wellnr.bashDSL.Description;
 import com.wellnr.bashDSL.Domainmodel;
+import com.wellnr.bashDSL.EnvironmentVariable;
+import com.wellnr.bashDSL.Function;
+import com.wellnr.bashDSL.OptionalArgument;
 import com.wellnr.bashDSL.Script;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -42,7 +47,42 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EClass descriptionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass abstractArgumentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass argumentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass optionalArgumentEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass environmentVariableEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass functionEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -122,9 +162,29 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getDomainmodel_ReadmeTitle()
+  {
+    return (EAttribute)domainmodelEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDomainmodel_ReadmeIntro()
+  {
+    return (EAttribute)domainmodelEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getDomainmodel_Elements()
   {
-    return (EReference)domainmodelEClass.getEStructuralFeatures().get(0);
+    return (EReference)domainmodelEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -172,7 +232,7 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getScript_Arguments()
+  public EReference getScript_LongDescription()
   {
     return (EReference)scriptEClass.getEStructuralFeatures().get(3);
   }
@@ -182,9 +242,109 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getScript_Variables()
+  {
+    return (EReference)scriptEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getScript_Arguments()
+  {
+    return (EReference)scriptEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getScript_OptArguments()
+  {
+    return (EReference)scriptEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getScript_Functions()
+  {
+    return (EReference)scriptEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getScript_Code()
   {
-    return (EAttribute)scriptEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)scriptEClass.getEStructuralFeatures().get(8);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getDescription()
+  {
+    return descriptionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDescription_Value()
+  {
+    return (EAttribute)descriptionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getAbstractArgument()
+  {
+    return abstractArgumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAbstractArgument_Name()
+  {
+    return (EAttribute)abstractArgumentEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAbstractArgument_Remaining()
+  {
+    return (EAttribute)abstractArgumentEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAbstractArgument_Description()
+  {
+    return (EAttribute)abstractArgumentEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -202,9 +362,9 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getArgument_Optional()
+  public EClass getOptionalArgument()
   {
-    return (EAttribute)argumentEClass.getEStructuralFeatures().get(0);
+    return optionalArgumentEClass;
   }
 
   /**
@@ -212,9 +372,9 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getArgument_Name()
+  public EAttribute getOptionalArgument_DynamicDefault()
   {
-    return (EAttribute)argumentEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)optionalArgumentEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -222,9 +382,9 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getArgument_Default()
+  public EAttribute getOptionalArgument_Default()
   {
-    return (EAttribute)argumentEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)optionalArgumentEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -232,9 +392,89 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getArgument_Description()
+  public EAttribute getOptionalArgument_IsBoolean()
   {
-    return (EAttribute)argumentEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)optionalArgumentEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEnvironmentVariable()
+  {
+    return environmentVariableEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEnvironmentVariable_Name()
+  {
+    return (EAttribute)environmentVariableEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEnvironmentVariable_DynamicDefault()
+  {
+    return (EAttribute)environmentVariableEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEnvironmentVariable_Default()
+  {
+    return (EAttribute)environmentVariableEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEnvironmentVariable_Description()
+  {
+    return (EAttribute)environmentVariableEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFunction()
+  {
+    return functionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFunction_Name()
+  {
+    return (EAttribute)functionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFunction_Code()
+  {
+    return (EAttribute)functionEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -268,20 +508,45 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
 
     // Create classes and their features
     domainmodelEClass = createEClass(DOMAINMODEL);
+    createEAttribute(domainmodelEClass, DOMAINMODEL__README_TITLE);
+    createEAttribute(domainmodelEClass, DOMAINMODEL__README_INTRO);
     createEReference(domainmodelEClass, DOMAINMODEL__ELEMENTS);
 
     scriptEClass = createEClass(SCRIPT);
     createEAttribute(scriptEClass, SCRIPT__NAME);
     createEAttribute(scriptEClass, SCRIPT__DESCRIPTION);
     createEAttribute(scriptEClass, SCRIPT__COPYRIGHT);
+    createEReference(scriptEClass, SCRIPT__LONG_DESCRIPTION);
+    createEReference(scriptEClass, SCRIPT__VARIABLES);
     createEReference(scriptEClass, SCRIPT__ARGUMENTS);
+    createEReference(scriptEClass, SCRIPT__OPT_ARGUMENTS);
+    createEReference(scriptEClass, SCRIPT__FUNCTIONS);
     createEAttribute(scriptEClass, SCRIPT__CODE);
 
+    descriptionEClass = createEClass(DESCRIPTION);
+    createEAttribute(descriptionEClass, DESCRIPTION__VALUE);
+
+    abstractArgumentEClass = createEClass(ABSTRACT_ARGUMENT);
+    createEAttribute(abstractArgumentEClass, ABSTRACT_ARGUMENT__NAME);
+    createEAttribute(abstractArgumentEClass, ABSTRACT_ARGUMENT__REMAINING);
+    createEAttribute(abstractArgumentEClass, ABSTRACT_ARGUMENT__DESCRIPTION);
+
     argumentEClass = createEClass(ARGUMENT);
-    createEAttribute(argumentEClass, ARGUMENT__OPTIONAL);
-    createEAttribute(argumentEClass, ARGUMENT__NAME);
-    createEAttribute(argumentEClass, ARGUMENT__DEFAULT);
-    createEAttribute(argumentEClass, ARGUMENT__DESCRIPTION);
+
+    optionalArgumentEClass = createEClass(OPTIONAL_ARGUMENT);
+    createEAttribute(optionalArgumentEClass, OPTIONAL_ARGUMENT__DYNAMIC_DEFAULT);
+    createEAttribute(optionalArgumentEClass, OPTIONAL_ARGUMENT__DEFAULT);
+    createEAttribute(optionalArgumentEClass, OPTIONAL_ARGUMENT__IS_BOOLEAN);
+
+    environmentVariableEClass = createEClass(ENVIRONMENT_VARIABLE);
+    createEAttribute(environmentVariableEClass, ENVIRONMENT_VARIABLE__NAME);
+    createEAttribute(environmentVariableEClass, ENVIRONMENT_VARIABLE__DYNAMIC_DEFAULT);
+    createEAttribute(environmentVariableEClass, ENVIRONMENT_VARIABLE__DEFAULT);
+    createEAttribute(environmentVariableEClass, ENVIRONMENT_VARIABLE__DESCRIPTION);
+
+    functionEClass = createEClass(FUNCTION);
+    createEAttribute(functionEClass, FUNCTION__NAME);
+    createEAttribute(functionEClass, FUNCTION__CODE);
   }
 
   /**
@@ -313,23 +578,50 @@ public class BashDSLPackageImpl extends EPackageImpl implements BashDSLPackage
     // Set bounds for type parameters
 
     // Add supertypes to classes
+    argumentEClass.getESuperTypes().add(this.getAbstractArgument());
+    optionalArgumentEClass.getESuperTypes().add(this.getAbstractArgument());
 
     // Initialize classes and features; add operations and parameters
     initEClass(domainmodelEClass, Domainmodel.class, "Domainmodel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDomainmodel_ReadmeTitle(), ecorePackage.getEString(), "readmeTitle", null, 0, 1, Domainmodel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDomainmodel_ReadmeIntro(), ecorePackage.getEString(), "readmeIntro", null, 0, 1, Domainmodel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDomainmodel_Elements(), this.getScript(), null, "elements", null, 0, -1, Domainmodel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(scriptEClass, Script.class, "Script", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getScript_Name(), ecorePackage.getEString(), "name", null, 0, 1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScript_Description(), ecorePackage.getEString(), "description", null, 0, 1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScript_Copyright(), ecorePackage.getEString(), "copyright", null, 0, 1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getScript_LongDescription(), this.getDescription(), null, "longDescription", null, 0, 1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getScript_Variables(), this.getEnvironmentVariable(), null, "variables", null, 0, -1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getScript_Arguments(), this.getArgument(), null, "arguments", null, 0, -1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getScript_OptArguments(), this.getOptionalArgument(), null, "optArguments", null, 0, -1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getScript_Functions(), this.getFunction(), null, "functions", null, 0, -1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getScript_Code(), ecorePackage.getEString(), "code", null, 0, 1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(descriptionEClass, Description.class, "Description", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDescription_Value(), ecorePackage.getEString(), "value", null, 0, 1, Description.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(abstractArgumentEClass, AbstractArgument.class, "AbstractArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAbstractArgument_Name(), ecorePackage.getEString(), "name", null, 0, 1, AbstractArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAbstractArgument_Remaining(), ecorePackage.getEBoolean(), "remaining", null, 0, 1, AbstractArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getAbstractArgument_Description(), ecorePackage.getEString(), "description", null, 0, 1, AbstractArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getArgument_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getArgument_Name(), ecorePackage.getEString(), "name", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getArgument_Default(), ecorePackage.getEString(), "default", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getArgument_Description(), ecorePackage.getEString(), "description", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(optionalArgumentEClass, OptionalArgument.class, "OptionalArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getOptionalArgument_DynamicDefault(), ecorePackage.getEBoolean(), "dynamicDefault", null, 0, 1, OptionalArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getOptionalArgument_Default(), ecorePackage.getEString(), "default", null, 0, 1, OptionalArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getOptionalArgument_IsBoolean(), ecorePackage.getEBoolean(), "isBoolean", null, 0, 1, OptionalArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(environmentVariableEClass, EnvironmentVariable.class, "EnvironmentVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getEnvironmentVariable_Name(), ecorePackage.getEString(), "name", null, 0, 1, EnvironmentVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEnvironmentVariable_DynamicDefault(), ecorePackage.getEBoolean(), "dynamicDefault", null, 0, 1, EnvironmentVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEnvironmentVariable_Default(), ecorePackage.getEString(), "default", null, 0, 1, EnvironmentVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEnvironmentVariable_Description(), ecorePackage.getEString(), "description", null, 0, 1, EnvironmentVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(functionEClass, Function.class, "Function", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFunction_Name(), ecorePackage.getEString(), "name", null, 0, 1, Function.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFunction_Code(), ecorePackage.getEString(), "code", null, 0, 1, Function.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

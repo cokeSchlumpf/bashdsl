@@ -7,17 +7,24 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.wellnr.bashDSL.Argument;
 import com.wellnr.bashDSL.BashDSLPackage;
+import com.wellnr.bashDSL.Description;
 import com.wellnr.bashDSL.Domainmodel;
+import com.wellnr.bashDSL.EnvironmentVariable;
+import com.wellnr.bashDSL.Function;
+import com.wellnr.bashDSL.OptionalArgument;
 import com.wellnr.bashDSL.Script;
 import com.wellnr.services.BashDSLGrammarAccess;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.serializer.acceptor.ISemanticSequenceAcceptor;
+import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
 import org.eclipse.xtext.serializer.diagnostic.ISemanticSequencerDiagnosticProvider;
 import org.eclipse.xtext.serializer.diagnostic.ISerializationDiagnostic.Acceptor;
 import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
 import org.eclipse.xtext.serializer.sequencer.GenericSequencer;
+import org.eclipse.xtext.serializer.sequencer.ISemanticNodeProvider.INodesForEObjectProvider;
 import org.eclipse.xtext.serializer.sequencer.ISemanticSequencer;
 import org.eclipse.xtext.serializer.sequencer.ITransientValueService;
+import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
 
 @SuppressWarnings("all")
 public class BashDSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {
@@ -31,8 +38,20 @@ public class BashDSLSemanticSequencer extends AbstractDelegatingSemanticSequence
 			case BashDSLPackage.ARGUMENT:
 				sequence_Argument(context, (Argument) semanticObject); 
 				return; 
+			case BashDSLPackage.DESCRIPTION:
+				sequence_Description(context, (Description) semanticObject); 
+				return; 
 			case BashDSLPackage.DOMAINMODEL:
 				sequence_Domainmodel(context, (Domainmodel) semanticObject); 
+				return; 
+			case BashDSLPackage.ENVIRONMENT_VARIABLE:
+				sequence_EnvironmentVariable(context, (EnvironmentVariable) semanticObject); 
+				return; 
+			case BashDSLPackage.FUNCTION:
+				sequence_Function(context, (Function) semanticObject); 
+				return; 
+			case BashDSLPackage.OPTIONAL_ARGUMENT:
+				sequence_OptionalArgument(context, (OptionalArgument) semanticObject); 
 				return; 
 			case BashDSLPackage.SCRIPT:
 				sequence_Script(context, (Script) semanticObject); 
@@ -43,7 +62,7 @@ public class BashDSLSemanticSequencer extends AbstractDelegatingSemanticSequence
 	
 	/**
 	 * Constraint:
-	 *     (optional?='optional'? name=STRING default=STRING? description=STRING)
+	 *     (name=STRING remaining?='reads remaining'? description=STRING)
 	 */
 	protected void sequence_Argument(EObject context, Argument semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -52,7 +71,23 @@ public class BashDSLSemanticSequencer extends AbstractDelegatingSemanticSequence
 	
 	/**
 	 * Constraint:
-	 *     elements+=Script*
+	 *     value=CODE_BLOCK
+	 */
+	protected void sequence_Description(EObject context, Description semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, BashDSLPackage.Literals.DESCRIPTION__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, BashDSLPackage.Literals.DESCRIPTION__VALUE));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getDescriptionAccess().getValueCODE_BLOCKTerminalRuleCall_1_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (readmeTitle=STRING readmeIntro=STRING? elements+=Script*)
 	 */
 	protected void sequence_Domainmodel(EObject context, Domainmodel semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -61,7 +96,54 @@ public class BashDSLSemanticSequencer extends AbstractDelegatingSemanticSequence
 	
 	/**
 	 * Constraint:
-	 *     (name=FILENAME description=STRING copyright=STRING? arguments+=Argument* code=CODE_BLOCK?)
+	 *     (name=ID (dynamicDefault?='dynamic'? default=STRING)? description=STRING)
+	 */
+	protected void sequence_EnvironmentVariable(EObject context, EnvironmentVariable semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (name=ID code=CODE_BLOCK)
+	 */
+	protected void sequence_Function(EObject context, Function semanticObject) {
+		if(errorAcceptor != null) {
+			if(transientValues.isValueTransient(semanticObject, BashDSLPackage.Literals.FUNCTION__NAME) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, BashDSLPackage.Literals.FUNCTION__NAME));
+			if(transientValues.isValueTransient(semanticObject, BashDSLPackage.Literals.FUNCTION__CODE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, BashDSLPackage.Literals.FUNCTION__CODE));
+		}
+		INodesForEObjectProvider nodes = createNodeProvider(semanticObject);
+		SequenceFeeder feeder = createSequencerFeeder(semanticObject, nodes);
+		feeder.accept(grammarAccess.getFunctionAccess().getNameIDTerminalRuleCall_1_0(), semanticObject.getName());
+		feeder.accept(grammarAccess.getFunctionAccess().getCodeCODE_BLOCKTerminalRuleCall_2_0(), semanticObject.getCode());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (name=STRING ((dynamicDefault?='dynamic'? default=STRING) | remaining?='reads remaining' | isBoolean?='without parameter')? description=STRING)
+	 */
+	protected void sequence_OptionalArgument(EObject context, OptionalArgument semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Constraint:
+	 *     (
+	 *         name=ID 
+	 *         description=STRING 
+	 *         copyright=STRING? 
+	 *         longDescription=Description? 
+	 *         variables+=EnvironmentVariable* 
+	 *         arguments+=Argument* 
+	 *         optArguments+=OptionalArgument* 
+	 *         functions+=Function* 
+	 *         code=CODE_BLOCK
+	 *     )
 	 */
 	protected void sequence_Script(EObject context, Script semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

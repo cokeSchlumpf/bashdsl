@@ -37,20 +37,48 @@ public class BashDSLParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
+					put(grammarAccess.getAbstractArgumentAccess().getAlternatives(), "rule__AbstractArgument__Alternatives");
+					put(grammarAccess.getOptionalArgumentAccess().getAlternatives_2(), "rule__OptionalArgument__Alternatives_2");
+					put(grammarAccess.getOptionalArgumentAccess().getAlternatives_2_0(), "rule__OptionalArgument__Alternatives_2_0");
+					put(grammarAccess.getDomainmodelAccess().getGroup(), "rule__Domainmodel__Group__0");
+					put(grammarAccess.getDomainmodelAccess().getGroup_2(), "rule__Domainmodel__Group_2__0");
 					put(grammarAccess.getScriptAccess().getGroup(), "rule__Script__Group__0");
 					put(grammarAccess.getScriptAccess().getGroup_3(), "rule__Script__Group_3__0");
+					put(grammarAccess.getDescriptionAccess().getGroup(), "rule__Description__Group__0");
 					put(grammarAccess.getArgumentAccess().getGroup(), "rule__Argument__Group__0");
-					put(grammarAccess.getArgumentAccess().getGroup_3(), "rule__Argument__Group_3__0");
-					put(grammarAccess.getDomainmodelAccess().getElementsAssignment(), "rule__Domainmodel__ElementsAssignment");
+					put(grammarAccess.getOptionalArgumentAccess().getGroup(), "rule__OptionalArgument__Group__0");
+					put(grammarAccess.getOptionalArgumentAccess().getGroup_2_0_0(), "rule__OptionalArgument__Group_2_0_0__0");
+					put(grammarAccess.getEnvironmentVariableAccess().getGroup(), "rule__EnvironmentVariable__Group__0");
+					put(grammarAccess.getEnvironmentVariableAccess().getGroup_2(), "rule__EnvironmentVariable__Group_2__0");
+					put(grammarAccess.getFunctionAccess().getGroup(), "rule__Function__Group__0");
+					put(grammarAccess.getDomainmodelAccess().getReadmeTitleAssignment_1(), "rule__Domainmodel__ReadmeTitleAssignment_1");
+					put(grammarAccess.getDomainmodelAccess().getReadmeIntroAssignment_2_1(), "rule__Domainmodel__ReadmeIntroAssignment_2_1");
+					put(grammarAccess.getDomainmodelAccess().getElementsAssignment_4(), "rule__Domainmodel__ElementsAssignment_4");
 					put(grammarAccess.getScriptAccess().getNameAssignment_1(), "rule__Script__NameAssignment_1");
 					put(grammarAccess.getScriptAccess().getDescriptionAssignment_2(), "rule__Script__DescriptionAssignment_2");
 					put(grammarAccess.getScriptAccess().getCopyrightAssignment_3_1(), "rule__Script__CopyrightAssignment_3_1");
-					put(grammarAccess.getScriptAccess().getArgumentsAssignment_5(), "rule__Script__ArgumentsAssignment_5");
-					put(grammarAccess.getScriptAccess().getCodeAssignment_6(), "rule__Script__CodeAssignment_6");
-					put(grammarAccess.getArgumentAccess().getOptionalAssignment_0(), "rule__Argument__OptionalAssignment_0");
-					put(grammarAccess.getArgumentAccess().getNameAssignment_2(), "rule__Argument__NameAssignment_2");
-					put(grammarAccess.getArgumentAccess().getDefaultAssignment_3_1(), "rule__Argument__DefaultAssignment_3_1");
-					put(grammarAccess.getArgumentAccess().getDescriptionAssignment_4(), "rule__Argument__DescriptionAssignment_4");
+					put(grammarAccess.getScriptAccess().getLongDescriptionAssignment_5(), "rule__Script__LongDescriptionAssignment_5");
+					put(grammarAccess.getScriptAccess().getVariablesAssignment_6(), "rule__Script__VariablesAssignment_6");
+					put(grammarAccess.getScriptAccess().getArgumentsAssignment_7(), "rule__Script__ArgumentsAssignment_7");
+					put(grammarAccess.getScriptAccess().getOptArgumentsAssignment_8(), "rule__Script__OptArgumentsAssignment_8");
+					put(grammarAccess.getScriptAccess().getFunctionsAssignment_9(), "rule__Script__FunctionsAssignment_9");
+					put(grammarAccess.getScriptAccess().getCodeAssignment_10(), "rule__Script__CodeAssignment_10");
+					put(grammarAccess.getDescriptionAccess().getValueAssignment_1(), "rule__Description__ValueAssignment_1");
+					put(grammarAccess.getArgumentAccess().getNameAssignment_1(), "rule__Argument__NameAssignment_1");
+					put(grammarAccess.getArgumentAccess().getRemainingAssignment_2(), "rule__Argument__RemainingAssignment_2");
+					put(grammarAccess.getArgumentAccess().getDescriptionAssignment_3(), "rule__Argument__DescriptionAssignment_3");
+					put(grammarAccess.getOptionalArgumentAccess().getNameAssignment_1(), "rule__OptionalArgument__NameAssignment_1");
+					put(grammarAccess.getOptionalArgumentAccess().getDynamicDefaultAssignment_2_0_0_1(), "rule__OptionalArgument__DynamicDefaultAssignment_2_0_0_1");
+					put(grammarAccess.getOptionalArgumentAccess().getDefaultAssignment_2_0_0_3(), "rule__OptionalArgument__DefaultAssignment_2_0_0_3");
+					put(grammarAccess.getOptionalArgumentAccess().getRemainingAssignment_2_0_1(), "rule__OptionalArgument__RemainingAssignment_2_0_1");
+					put(grammarAccess.getOptionalArgumentAccess().getIsBooleanAssignment_2_1(), "rule__OptionalArgument__IsBooleanAssignment_2_1");
+					put(grammarAccess.getOptionalArgumentAccess().getDescriptionAssignment_3(), "rule__OptionalArgument__DescriptionAssignment_3");
+					put(grammarAccess.getEnvironmentVariableAccess().getNameAssignment_1(), "rule__EnvironmentVariable__NameAssignment_1");
+					put(grammarAccess.getEnvironmentVariableAccess().getDynamicDefaultAssignment_2_1(), "rule__EnvironmentVariable__DynamicDefaultAssignment_2_1");
+					put(grammarAccess.getEnvironmentVariableAccess().getDefaultAssignment_2_3(), "rule__EnvironmentVariable__DefaultAssignment_2_3");
+					put(grammarAccess.getEnvironmentVariableAccess().getDescriptionAssignment_3(), "rule__EnvironmentVariable__DescriptionAssignment_3");
+					put(grammarAccess.getFunctionAccess().getNameAssignment_1(), "rule__Function__NameAssignment_1");
+					put(grammarAccess.getFunctionAccess().getCodeAssignment_2(), "rule__Function__CodeAssignment_2");
 				}
 			};
 		}

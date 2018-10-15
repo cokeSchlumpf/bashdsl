@@ -1,9 +1,0 @@
-grammar com.wellnr.BashDSL with org.eclipse.xtext.common.Terminals
-
-generate bashDSL "http://www.wellnr.com/BashDSL"
-
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';

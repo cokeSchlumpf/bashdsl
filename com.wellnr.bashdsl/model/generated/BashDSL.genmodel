@@ -8,20 +8,44 @@
   <genPackages prefix="BashDSL" basePackage="com.wellnr" disposableProviderFactory="true"
       fileExtensions="bdsl" ecorePackage="BashDSL.ecore#/">
     <genClasses ecoreClass="BashDSL.ecore#//Domainmodel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Domainmodel/readmeTitle"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Domainmodel/readmeIntro"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Domainmodel/elements"/>
     </genClasses>
     <genClasses ecoreClass="BashDSL.ecore#//Script">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/copyright"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Script/longDescription"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Script/variables"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Script/arguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Script/optArguments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference BashDSL.ecore#//Script/functions"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Script/code"/>
     </genClasses>
-    <genClasses ecoreClass="BashDSL.ecore#//Argument">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/optional"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/default"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Argument/description"/>
+    <genClasses ecoreClass="BashDSL.ecore#//Description">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Description/value"/>
+    </genClasses>
+    <genClasses ecoreClass="BashDSL.ecore#//AbstractArgument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//AbstractArgument/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//AbstractArgument/remaining"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//AbstractArgument/description"/>
+    </genClasses>
+    <genClasses ecoreClass="BashDSL.ecore#//Argument"/>
+    <genClasses ecoreClass="BashDSL.ecore#//OptionalArgument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//OptionalArgument/dynamicDefault"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//OptionalArgument/default"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//OptionalArgument/isBoolean"/>
+    </genClasses>
+    <genClasses ecoreClass="BashDSL.ecore#//EnvironmentVariable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//EnvironmentVariable/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//EnvironmentVariable/dynamicDefault"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//EnvironmentVariable/default"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//EnvironmentVariable/description"/>
+    </genClasses>
+    <genClasses ecoreClass="BashDSL.ecore#//Function">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Function/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute BashDSL.ecore#//Function/code"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

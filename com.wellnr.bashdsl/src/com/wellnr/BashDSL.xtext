@@ -3,25 +3,51 @@ grammar com.wellnr.BashDSL with org.eclipse.xtext.common.Terminals
 generate bashDSL "http://www.wellnr.com/BashDSL"
 
 Domainmodel:
+  '@GenerateReadme(' readmeTitle = STRING (',' readmeIntro = STRING)? ')'
   (elements += Script)*
 ;
  
 Script:
-  'script' name = FILENAME description = STRING ('copyright' copyright = STRING)? '{'
+  'script' name = ID description = STRING ('copyright' copyright = STRING)? '{'
+    (longDescription = Description)?
+    (variables += EnvironmentVariable)*
     (arguments += Argument)*
+    (optArguments += OptionalArgument)*
     
-    (code = CODE_BLOCK)?
+    (functions += Function)*
+    
+    code = CODE_BLOCK
   '}'
 ;
 
-Argument:
-	(optional ?= 'optional')? 'argument' name = STRING ('with default' default = STRING)? description = STRING
+Description:
+  "description" value = CODE_BLOCK
 ;
 
-terminal FILENAME:
-	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'-'|'.'|'0'..'9')*
+AbstractArgument:
+	Argument | OptionalArgument
+;
+
+Argument:
+  'argument' name = STRING (remaining ?= 'reads remaining')? description = STRING
+;
+
+OptionalArgument:
+  'optional argument' name = STRING (('with' (dynamicDefault ?= 'dynamic')? 'default' default = STRING | remaining ?= 'reads remaining') | isBoolean ?= 'without parameter')? description = STRING
+;
+
+EnvironmentVariable:
+  'env' name = ID ('with' (dynamicDefault ?= 'dynamic')? 'default' default = STRING)? description = STRING
+;
+
+Function:
+  'def' name = ID code = CODE_BLOCK
+;
+
+terminal ID:
+  ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9')*
 ;
 
 terminal CODE_BLOCK:
-	'"""' -> '"""'
+	'{{{' -> '}}}'
 ;
